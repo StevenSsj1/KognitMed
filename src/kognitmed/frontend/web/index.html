@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KognitMed</title>
+    <link rel="stylesheet" href="/chat-assets/styles.css" />
+    <script src="/chat-assets/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell" id="app-shell">
+      <button class="scrim" id="scrim" type="button" aria-label="Cerrar historial"></button>
+
+      <aside class="sidebar" id="sidebar" aria-label="Historial">
+        <header class="sidebar-header">
+          <div class="brand">
+            <span class="brand-mark" aria-hidden="true">KM</span>
+            <div>
+              <p class="sidebar-title">KognitMed</p>
+              <p class="sidebar-subtitle">Conversaciones</p>
+            </div>
+          </div>
+          <button class="icon-button mobile-only" id="close-sidebar" type="button" aria-label="Cerrar historial">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </header>
+
+        <button class="new-chat" id="new-chat" type="button">
+          <span aria-hidden="true">+</span>
+          Nueva conversacion
+        </button>
+
+        <div class="sidebar-summary">
+          <span class="summary-signal" aria-hidden="true"></span>
+          <div>
+            <p>Asistente activo</p>
+            <strong>Orientacion conversacional</strong>
+          </div>
+        </div>
+
+        <div class="history" id="history"></div>
+      </aside>
+
+      <main class="chat-main">
+        <header class="topbar">
+          <div class="topbar-title">
+            <button class="icon-button mobile-only" id="open-sidebar" type="button" aria-label="Abrir historial">
+              <span aria-hidden="true">&#9776;</span>
+            </button>
+            <button class="icon-button desktop-only" id="collapse-sidebar" type="button" aria-label="Ocultar historial">
+              <span aria-hidden="true">&#9776;</span>
+            </button>
+            <div class="title-copy">
+              <p class="eyebrow">Asistente medico</p>
+              <h1 id="conversation-title">Nueva conversacion</h1>
+              <p class="meta-line">
+                <span id="provider-label" class="provider-state">API KognitMed</span>
+                <span id="location-state" class="location-state">Ubicacion pendiente</span>
+              </p>
+            </div>
+          </div>
+          <div class="topbar-tools">
+            <button class="icon-button" id="theme-toggle" type="button" aria-label="Cambiar tema">
+              <span id="theme-glyph" aria-hidden="true">&#9789;</span>
+            </button>
+          </div>
+        </header>
+
+        <section class="conversation" aria-label="Chat">
+          <div class="thread-frame">
+            <ol class="messages" id="messages" aria-live="polite"></ol>
+          </div>
+          <button class="scroll-button" id="scroll-button" type="button" aria-label="Ir al mensaje mas reciente">
+            <span aria-hidden="true">&#8595;</span>
+          </button>
+        </section>
+
+        <form class="composer" id="composer">
+          <label class="sr-only" for="message-input">Mensaje</label>
+          <textarea
+            id="message-input"
+            name="message"
+            maxlength="4096"
+            rows="1"
+            placeholder="Describe tu consulta"
+            required
+          ></textarea>
+          <div class="composer-actions">
+            <p class="composer-status" id="composer-status">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span id="composer-status-text">Listo</span>
+            </p>
+            <button class="send-button" id="send-button" type="submit" aria-label="Enviar mensaje">
+              <span aria-hidden="true">&#8593;</span>
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </body>
+</html>

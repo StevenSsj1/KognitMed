@@ -23,6 +23,7 @@ from kognitmed.exceptions import (
     not_found_handler,
     validation_error_handler,
 )
+from kognitmed.frontend.web import mount_chat_frontend
 from kognitmed.infrastructure.api.router import root_router
 from kognitmed.infrastructure.core.logging import configure_logging
 from kognitmed.middleware import register_middleware
@@ -37,11 +38,11 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     configure_logging(debug=settings.debug)
     log.info("kognitmed_starting", provider=settings.llm_provider, debug=settings.debug)
 
-    # Initialize and verify MongoDB connection
-    from kognitmed.infrastructure.database.mongo import ping_mongo, close_mongo_client
-    db_connected = await ping_mongo(settings)
-    if not db_connected:
-        log.warning("database_connection_not_ready_at_startup")
+    # MongoDB is intentionally disabled for now.
+    # from kognitmed.infrastructure.database.mongo import ping_mongo, close_mongo_client
+    # db_connected = await ping_mongo(settings)
+    # if not db_connected:
+    #     log.warning("database_connection_not_ready_at_startup")
 
     # Initialize and verify ChromaDB connection (file/persistent mode — no server needed)
     from kognitmed.infrastructure.database.chroma import ping_chroma, close_chroma_client, get_chroma_client
@@ -67,8 +68,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     yield
 
-    # Clean up database client connection
-    close_mongo_client()
+    # MongoDB is intentionally disabled for now.
+    # close_mongo_client()
     # Release ChromaDB client reference
     close_chroma_client()
     log.info("kognitmed_shutdown")
@@ -100,6 +101,7 @@ def create_app() -> FastAPI:
 
     # Routers
     app.include_router(root_router)
+    mount_chat_frontend(app)
 
     return app
 

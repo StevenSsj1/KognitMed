@@ -89,22 +89,26 @@ class Settings(BaseSettings):
     orientador_synthesis_model: str = ""
 
     # ── MongoDB ──────────────────────────────────
-    mongo_host: str = "localhost"
-    mongo_port: int = 27017
-    mongo_user: str = "admin"
-    mongo_password: str = "securepassword123"
-    mongo_db: str = "kognitmed"
+    # MongoDB is intentionally disabled for now.
+    # mongo_host: str = "localhost"
+    # mongo_port: int = 27017
+    # mongo_user: str = "admin"
+    # mongo_password: str = "securepassword123"
+    # mongo_db: str = "kognitmed"
 
     # ── ChromaDB ─────────────────────────────────────
     chroma_persist_path: str = ".chroma"
 
-    @property
-    def mongo_uri(self) -> str:
-        """Construct the MongoDB connection URI securely."""
-        import urllib.parse
-        user = urllib.parse.quote_plus(self.mongo_user)
-        pwd = urllib.parse.quote_plus(self.mongo_password)
-        return f"mongodb://{user}:{pwd}@{self.mongo_host}:{self.mongo_port}/{self.mongo_db}?authSource=admin"
+    # @property
+    # def mongo_uri(self) -> str:
+    #     """Construct the MongoDB connection URI securely."""
+    #     import urllib.parse
+    #     user = urllib.parse.quote_plus(self.mongo_user)
+    #     pwd = urllib.parse.quote_plus(self.mongo_password)
+    #     return (
+    #         f"mongodb://{user}:{pwd}@{self.mongo_host}:{self.mongo_port}/"
+    #         f"{self.mongo_db}?authSource=admin"
+    #     )
 
     def model_post_init(self, __context: object) -> None:
         # Resolve secret key with fallback strategy
