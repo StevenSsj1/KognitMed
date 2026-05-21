@@ -16,6 +16,7 @@ import secrets
 from pathlib import Path
 from typing import Literal
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 logger = logging.getLogger(__name__)
@@ -58,6 +59,19 @@ class Settings(BaseSettings):
     secret_key: str = ""
     allowed_origins: list[str] = ["http://localhost:3000", "http://localhost:8080"]
 
+    @field_validator("allowed_origins", mode="before")
+    @classmethod
+    def parse_allowed_origins(cls, v: object) -> list[str]:
+        if isinstance(v, str):
+            if v.startswith("[") and v.endswith("]"):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [x.strip() for x in v.split(",") if x.strip()]
+        return v  # type: ignore
+
     # ── LLM ──────────────────────────────────────
     llm_provider: Literal["openai", "gemini"] = "openai"
 
@@ -66,6 +80,21 @@ class Settings(BaseSettings):
 
     gemini_api_key: str = ""
     gemini_model: str = "gemini-1.5-flash"
+
+    # ── MongoDB ──────────────────────────────────
+    mongo_host: str = "localhost"
+    mongo_port: int = 27017
+    mongo_user: str = "admin"
+    mongo_password: str = "securepassword123"
+    mongo_db: str = "kognitmed"
+
+    @property
+    def mongo_uri(self) -> str:
+        """Construct the MongoDB connection URI securely."""
+        import urllib.parse
+        user = urllib.parse.quote_plus(self.mongo_user)
+        pwd = urllib.parse.quote_plus(self.mongo_password)
+        return f"mongodb://{user}:{pwd}@{self.mongo_host}:{self.mongo_port}/{self.mongo_db}?authSource=admin"
 
     def model_post_init(self, __context: object) -> None:
         # Resolve secret key with fallback strategy

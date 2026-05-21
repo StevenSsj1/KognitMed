@@ -36,7 +36,17 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     settings = get_settings()
     configure_logging(debug=settings.debug)
     log.info("kognitmed_starting", provider=settings.llm_provider, debug=settings.debug)
+
+    # Initialize and verify MongoDB connection
+    from kognitmed.infrastructure.database.mongo import ping_mongo, close_mongo_client
+    db_connected = await ping_mongo(settings)
+    if not db_connected:
+        log.warning("database_connection_not_ready_at_startup")
+
     yield
+
+    # Clean up database client connection
+    close_mongo_client()
     log.info("kognitmed_shutdown")
 
 

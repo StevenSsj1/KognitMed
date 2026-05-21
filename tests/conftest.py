@@ -2,6 +2,12 @@
 
 from __future__ import annotations
 
+import os
+
+# Set mock API keys for testing before importing settings
+os.environ["OPENAI_API_KEY"] = "mock-openai-key"
+os.environ["GEMINI_API_KEY"] = "mock-gemini-key"
+
 from typing import AsyncGenerator
 from unittest.mock import AsyncMock
 
@@ -10,6 +16,8 @@ from httpx import ASGITransport, AsyncClient
 
 from kognitmed.infrastructure.llm_providers.base_provider import AbstractLLMProvider
 from kognitmed.main import create_app
+
+
 
 
 class MockLLMProvider(AbstractLLMProvider):
