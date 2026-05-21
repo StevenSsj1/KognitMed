@@ -72,7 +72,7 @@ class Settings(BaseSettings):
             return [x.strip() for x in v.split(",") if x.strip()]
         return v  # type: ignore
 
-    # ── LLM ──────────────────────────────────────
+    # ── LLM ──────────────────────────────────────────
     llm_provider: Literal["openai", "gemini"] = "openai"
 
     openai_api_key: str = ""
@@ -81,12 +81,22 @@ class Settings(BaseSettings):
     gemini_api_key: str = ""
     gemini_model: str = "gemini-1.5-flash"
 
+    # ── MediOrientador — modelos por layer ───────────────────────────────────
+    # Si están vacíos, heredan el modelo global del proveedor configurado.
+    # Extracción de síntomas: tarea estructurada (JSON) → modelo rápido y barato.
+    orientador_extraction_model: str = ""
+    # Síntesis conversacional: requiere calidez y razonamiento → modelo potente.
+    orientador_synthesis_model: str = ""
+
     # ── MongoDB ──────────────────────────────────
     mongo_host: str = "localhost"
     mongo_port: int = 27017
     mongo_user: str = "admin"
     mongo_password: str = "securepassword123"
     mongo_db: str = "kognitmed"
+
+    # ── ChromaDB ─────────────────────────────────────
+    chroma_persist_path: str = ".chroma"
 
     @property
     def mongo_uri(self) -> str:

@@ -1,0 +1,3098 @@
+{
+  "metadata": {
+    "descripcion": "Dataset de red médica de aseguradoras Ecuador - enriquecido con coordenadas y especialidades",
+    "fecha_enriquecimiento": "2026-05-21",
+    "version": "2.0.0",
+    "fuente_original": "Scraping público de saludsa, ecuasanitas, humana, bupa, bmi",
+    "total_hospitales_unicos": 93,
+    "hospitales_con_coordenadas": 88,
+    "hospitales_con_especialidades": 72
+  },
+  "hospitales_unicos": [
+    {
+      "nombre": "Hospital Vozandes",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "saludsa",
+        "bmi"
+      ],
+      "latitud": -0.1922,
+      "longitud": -78.4953,
+      "especialidades": [
+        "Cardiología",
+        "Cirugía General",
+        "Ginecología",
+        "Pediatría",
+        "Traumatología",
+        "Medicina Interna",
+        "Oftalmología",
+        "Neurología",
+        "Oncología",
+        "UCI",
+        "Gastroenterología"
+      ],
+      "nota": "Cobertura diferenciada 80% planes Star 15K/Lite, 90% Star 30K/Lite",
+      "grupo": ""
+    },
+    {
+      "nombre": "Centrales Médicas Veris",
+      "ciudad": "Multiple",
+      "aseguradoras": [
+        "saludsa"
+      ],
+      "latitud": -0.1766,
+      "longitud": -78.4862,
+      "especialidades": [
+        "Medicina General",
+        "Pediatría",
+        "Ginecología",
+        "Laboratorio Clínico",
+        "Urgencias Ambulatorias",
+        "Imagenología",
+        "Traumatología"
+      ],
+      "nota": "Cobertura ambulatoria diferenciada 40-50%",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Metropolitano",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "humana",
+        "bmi"
+      ],
+      "latitud": -0.1833,
+      "longitud": -78.4833,
+      "especialidades": [
+        "Cardiología",
+        "Cirugía Cardiovascular",
+        "Neurología",
+        "Oncología",
+        "Traumatología",
+        "Ginecología",
+        "Obstetricia",
+        "Pediatría",
+        "Cirugía General",
+        "UCI",
+        "Neonatología",
+        "Gastroenterología",
+        "Urología",
+        "Ortopedia",
+        "Radioterapia",
+        "Hematología",
+        "Neumología"
+      ],
+      "nota": "",
+      "grupo": "Conclina"
+    },
+    {
+      "nombre": "Omni Hospital",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "humana",
+        "bupa",
+        "bmi"
+      ],
+      "latitud": -2.1468,
+      "longitud": -79.8992,
+      "especialidades": [
+        "Cardiología",
+        "Cirugía Cardiovascular",
+        "Neurología",
+        "Oncología",
+        "Ginecología",
+        "Traumatología",
+        "Cirugía General",
+        "UCI",
+        "Neonatología",
+        "Gastroenterología",
+        "Urología",
+        "Oftalmología",
+        "Cirugía Plástica",
+        "Neumología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Clínica Kennedy",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "humana"
+      ],
+      "latitud": null,
+      "longitud": null,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Padre Carollo / Fundación Tierra Nueva",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "humana"
+      ],
+      "latitud": -0.2959,
+      "longitud": -78.5513,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Pediatría",
+        "Medicina Interna",
+        "Traumatología",
+        "Cardiología",
+        "Medicina Comunitaria"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica de Especialidades Tumbaco",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "humana"
+      ],
+      "latitud": -0.2171,
+      "longitud": -78.4041,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Cardiología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "SIME USFQ",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "humana"
+      ],
+      "latitud": -0.2111,
+      "longitud": -78.4319,
+      "especialidades": [
+        "Medicina General",
+        "Pediatría",
+        "Ginecología",
+        "Laboratorio",
+        "Urgencias Ambulatorias",
+        "Imagenología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica María Auxiliadora",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "humana"
+      ],
+      "latitud": -0.1933,
+      "longitud": -78.4956,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Sur Hospital",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "humana",
+        "bmi"
+      ],
+      "latitud": -2.2257,
+      "longitud": -79.9087,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Pediatría",
+        "Medicina Interna"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Mediglobal",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "humana"
+      ],
+      "latitud": -2.1536,
+      "longitud": -79.896,
+      "especialidades": [
+        "Medicina General",
+        "Pediatría",
+        "Ginecología",
+        "Urgencias Ambulatorias",
+        "Laboratorio"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica San Francisco",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "humana"
+      ],
+      "latitud": -2.1389,
+      "longitud": -79.8945,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Santa María",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "humana"
+      ],
+      "latitud": -2.1743,
+      "longitud": -79.9141,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Panamericana",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "humana",
+        "bmi"
+      ],
+      "latitud": -2.1917,
+      "longitud": -79.8892,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Pediatría",
+        "Traumatología",
+        "Medicina Interna",
+        "Cardiología",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Central Aprofe",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "humana"
+      ],
+      "latitud": -2.191,
+      "longitud": -79.8856,
+      "especialidades": [
+        "Ginecología",
+        "Planificación Familiar",
+        "Cirugía General",
+        "Pediatría",
+        "Medicina Preventiva",
+        "Salud Reproductiva"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Kennedy La Alborada",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "humana"
+      ],
+      "latitud": -2.1166,
+      "longitud": -79.8994,
+      "especialidades": [
+        "Cardiología",
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Neurología",
+        "Pediatría",
+        "UCI"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Medilink",
+      "ciudad": "Quito y Guayaquil",
+      "aseguradoras": [
+        "humana",
+        "bupa"
+      ],
+      "latitud": -0.1766,
+      "longitud": -78.4862,
+      "especialidades": [
+        "Medicina General",
+        "Pediatría",
+        "Ginecología",
+        "Urgencias Ambulatorias",
+        "Laboratorio",
+        "Imagenología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Bupa",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.201,
+      "longitud": -78.491,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "BIODIMED",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.201,
+      "longitud": -78.491,
+      "especialidades": [
+        "Laboratorio Clínico",
+        "Imagenología",
+        "Medicina General",
+        "Pediatría"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica de la mujer",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa",
+        "bmi"
+      ],
+      "latitud": -0.1742,
+      "longitud": -78.4801,
+      "especialidades": [
+        "Ginecología",
+        "Obstetricia",
+        "Neonatología",
+        "Fertilidad",
+        "Perinatología",
+        "Cirugía Ginecológica"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica DLM",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.205,
+      "longitud": -78.49,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica la paz",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.198,
+      "longitud": -78.495,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Grupo Hospitalario Kennedy",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -2.1559,
+      "longitud": -79.9016,
+      "especialidades": [
+        "Cardiología",
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Neurología",
+        "Oncología",
+        "Pediatría",
+        "UCI",
+        "Gastroenterología",
+        "Urología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Clínica Panamericana",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -2.1917,
+      "longitud": -79.8892,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Pediatría",
+        "Traumatología",
+        "Medicina Interna",
+        "Cardiología",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "INTERLAB",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -2.1853,
+      "longitud": -79.9028,
+      "especialidades": [
+        "Laboratorio Clínico",
+        "Microbiología",
+        "Biología Molecular",
+        "Anatomía Patológica"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "San Agustín Laboratorio",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -3.9985,
+      "longitud": -79.21,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Médikal",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": null,
+      "longitud": null,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Praxmed",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.203,
+      "longitud": -78.492,
+      "especialidades": [
+        "Medicina General",
+        "Pediatría",
+        "Ginecología",
+        "Urgencias Ambulatorias",
+        "Laboratorio"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "San Diego Centro de Especialidades",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.19,
+      "longitud": -78.5,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Sistemas Médicos",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.21,
+      "longitud": -78.495,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "SOLCA",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.148,
+      "longitud": -78.4817,
+      "especialidades": [
+        "Oncología",
+        "Quimioterapia",
+        "Radioterapia",
+        "Cirugía Oncológica",
+        "Hematología",
+        "Onco-Pediatría"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "VERIS",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.1766,
+      "longitud": -78.4862,
+      "especialidades": [
+        "Medicina General",
+        "Pediatría",
+        "Ginecología",
+        "Laboratorio Clínico",
+        "Urgencias Ambulatorias",
+        "Imagenología",
+        "Traumatología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "UEESCLINIC",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -2.1497,
+      "longitud": -79.8629,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "AXXIS",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.1697,
+      "longitud": -78.4838,
+      "especialidades": [
+        "Gastroenterología",
+        "Cirugía Bariátrica",
+        "Cardiología",
+        "Neurología",
+        "Oncología",
+        "Cirugía General",
+        "Pediatría",
+        "Ginecología",
+        "Ortopedia",
+        "Urología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Guayaquil",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa",
+        "bmi"
+      ],
+      "latitud": -2.1931,
+      "longitud": -79.8858,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Pediatría",
+        "Traumatología",
+        "Medicina Interna",
+        "Cardiología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Metrored",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.1766,
+      "longitud": -78.4862,
+      "especialidades": [
+        "Medicina General",
+        "Pediatría",
+        "Ginecología",
+        "Laboratorio Clínico",
+        "Medicina Preventiva",
+        "Imagenología",
+        "Urgencias Ambulatorias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "INTERHOSPITAL",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa",
+        "bmi"
+      ],
+      "latitud": -2.2,
+      "longitud": -80.0234,
+      "especialidades": [
+        "Oncología",
+        "Cirugía General",
+        "Cardiología",
+        "Neurología",
+        "Ginecología",
+        "Traumatología",
+        "UCI",
+        "Hematología",
+        "Neumología",
+        "Cirugía Cardiovascular"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Palacio Alcivar Laboratorio",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": null,
+      "longitud": null,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Metropolitana",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.195,
+      "longitud": -78.503,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital San Gregorio",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.205,
+      "longitud": -78.495,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Clínica del Pacífico",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -2.6438,
+      "longitud": -80.3899,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "PARAMI",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -2.1559,
+      "longitud": -79.9016,
+      "especialidades": [
+        "Medicina General",
+        "Pediatría",
+        "Ginecología",
+        "Urgencias Ambulatorias",
+        "Laboratorio"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "SIME",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.2111,
+      "longitud": -78.4319,
+      "especialidades": [
+        "Medicina General",
+        "Pediatría",
+        "Ginecología",
+        "Laboratorio",
+        "Urgencias Ambulatorias",
+        "Imagenología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "HOSPICOR",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.195,
+      "longitud": -78.503,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Medilab",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -3.986,
+      "longitud": -79.205,
+      "especialidades": [
+        "Laboratorio Clínico",
+        "Imagenología",
+        "Medicina General",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínicas del Salto",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.21,
+      "longitud": -78.5,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Cerid",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -2.14,
+      "longitud": -79.895,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "IMAB",
+      "ciudad": "",
+      "aseguradoras": [
+        "bupa"
+      ],
+      "latitud": -0.2,
+      "longitud": -78.49,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital del Río",
+      "ciudad": "Cuenca",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.8978,
+      "longitud": -79.002,
+      "especialidades": [
+        "Cardiología",
+        "Cirugía Cardiovascular",
+        "Cirugía General",
+        "Ginecología",
+        "Neurología",
+        "Traumatología",
+        "UCI",
+        "Oncología",
+        "Pediatría",
+        "Gastroenterología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Monte Sinaí",
+      "ciudad": "Cuenca",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.9143,
+      "longitud": -79.0186,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Pediatría",
+        "Medicina Interna",
+        "Cardiología",
+        "Neurología",
+        "UCI",
+        "Oncología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital San Juan de Dios",
+      "ciudad": "Cuenca",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.905,
+      "longitud": -79.0012,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Pediatría",
+        "Medicina Interna",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Santa Inés",
+      "ciudad": "Cuenca",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.9066,
+      "longitud": -79.0077,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Pediatría",
+        "Medicina Interna",
+        "Cardiología",
+        "Neurología",
+        "UCI"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Santa Ana",
+      "ciudad": "Cuenca",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.9156,
+      "longitud": -79.0238,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Pediatría",
+        "Medicina Interna",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Alcívar",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.1853,
+      "longitud": -79.9028,
+      "especialidades": [
+        "Cardiología",
+        "Cirugía Cardiovascular",
+        "Traumatología",
+        "Cirugía General",
+        "Ginecología",
+        "Neurología",
+        "Oncología",
+        "UCI",
+        "Flebología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Clínica Kennedy Policentro",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.1559,
+      "longitud": -79.9016,
+      "especialidades": [
+        "Cardiología",
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Neurología",
+        "Oncología",
+        "Pediatría",
+        "UCI",
+        "Gastroenterología",
+        "Urología",
+        "Cirugía Cardiovascular"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Kennedy Samborondón",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.1407,
+      "longitud": -79.8607,
+      "especialidades": [
+        "Cardiología",
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Neurología",
+        "Pediatría",
+        "UCI",
+        "Oncología",
+        "Gastroenterología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "SOLCA Núcleo de Guayaquil",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.1703,
+      "longitud": -79.88,
+      "especialidades": [
+        "Oncología",
+        "Quimioterapia",
+        "Radioterapia",
+        "Cirugía Oncológica",
+        "Hematología",
+        "Braquiterapia"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Roberto Gilbert",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.1598,
+      "longitud": -79.9083,
+      "especialidades": [
+        "Pediatría",
+        "Neonatología",
+        "Cirugía Pediátrica",
+        "Medicina Interna",
+        "Ginecología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital de la Mujer Alfredo Paulson",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.1598,
+      "longitud": -79.9083,
+      "especialidades": [
+        "Ginecología",
+        "Obstetricia",
+        "Neonatología",
+        "Perinatología",
+        "Fertilidad"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Luis Vernaza",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.1906,
+      "longitud": -79.8825,
+      "especialidades": [
+        "Cirugía General",
+        "Medicina Interna",
+        "Cardiología",
+        "Neurología",
+        "Traumatología",
+        "UCI",
+        "Quemados",
+        "Nefrología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Alborada",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.1166,
+      "longitud": -79.8994,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Pediatría",
+        "Medicina Interna",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Milenium",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.1523,
+      "longitud": -79.8877,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Cardiología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Rendón",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.201,
+      "longitud": -79.921,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica La Unión",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.1555,
+      "longitud": -79.9073,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Pediatría",
+        "Medicina Interna",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Clínica San Francisco",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.1389,
+      "longitud": -79.8945,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Axxis Hospital",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.1697,
+      "longitud": -78.4838,
+      "especialidades": [
+        "Gastroenterología",
+        "Cirugía Bariátrica",
+        "Cardiología",
+        "Neurología",
+        "Oncología",
+        "Cirugía General",
+        "Pediatría",
+        "Ginecología",
+        "Ortopedia",
+        "Urología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "NovaCLÍNICA Santa Cecilia",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.2197,
+      "longitud": -78.5068,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Pediatría",
+        "Traumatología",
+        "Medicina Interna",
+        "Cardiología",
+        "UCI"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Alianza",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.2109,
+      "longitud": -78.498,
+      "especialidades": [
+        "Traumatología",
+        "Ortopedia",
+        "Cirugía General",
+        "Neurología",
+        "Medicina Interna",
+        "Ginecología",
+        "Pediatría"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Padre Carollo",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.2959,
+      "longitud": -78.5513,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Pediatría",
+        "Medicina Interna",
+        "Traumatología",
+        "Cardiología",
+        "Medicina Comunitaria"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "NorthHospital",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": null,
+      "longitud": null,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital de los Valles",
+      "ciudad": "Quito (Cumbayá)",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.2163,
+      "longitud": -78.4307,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Pediatría",
+        "Traumatología",
+        "Cardiología",
+        "Neurología",
+        "Medicina Interna",
+        "UCI",
+        "Oncología",
+        "Gastroenterología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "SOLCA Núcleo de Quito",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.148,
+      "longitud": -78.4817,
+      "especialidades": [
+        "Oncología",
+        "Quimioterapia",
+        "Radioterapia",
+        "Cirugía Oncológica",
+        "Hematología",
+        "Onco-Pediatría"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Internacional",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.2136,
+      "longitud": -78.5079,
+      "especialidades": [
+        "Cardiología",
+        "Neurología",
+        "Cirugía General",
+        "Pediatría",
+        "Traumatología",
+        "Ginecología",
+        "Medicina Interna",
+        "UCI"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica del Río",
+      "ciudad": "Quito",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": null,
+      "longitud": null,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Alfa Hospital",
+      "ciudad": "Ibarra",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": 0.3543,
+      "longitud": -78.1272,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Cardiología",
+        "UCI"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Nova Clínica Moderna / Climoder",
+      "ciudad": "Ibarra",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.227,
+      "longitud": -78.5156,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Cardiología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "RioHospital",
+      "ciudad": "Riobamba",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -1.666,
+      "longitud": -78.645,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "UCI"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Metropolitana Metrisa",
+      "ciudad": "Riobamba",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -1.6723,
+      "longitud": -78.6435,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Durán",
+      "ciudad": "Ambato",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -1.248,
+      "longitud": -78.617,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Cardiología",
+        "UCI"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Privado Tungurahua",
+      "ciudad": "Ambato",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -1.248,
+      "longitud": -78.6201,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Cardiología",
+        "UCI"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Santa Inés de Ambato",
+      "ciudad": "Ambato",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -1.2491,
+      "longitud": -78.6241,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Cardiología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital González Granda",
+      "ciudad": "Lago Agrio",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": 0.0866,
+      "longitud": -76.8891,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "NovaCLÍNICA Santa Anita",
+      "ciudad": "Santo Domingo",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.2608,
+      "longitud": -79.1734,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Araujo",
+      "ciudad": "Santo Domingo",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.2477,
+      "longitud": -79.1754,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Cardiología",
+        "UCI"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Santiago",
+      "ciudad": "Santo Domingo",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.2551,
+      "longitud": -79.1804,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Colón",
+      "ciudad": "Esmeraldas",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": 0.9553,
+      "longitud": -79.6523,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital Clínica San Agustín",
+      "ciudad": "Loja",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -3.9985,
+      "longitud": -79.21,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Cardiología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Hospital UTPL - Santa Inés",
+      "ciudad": "Loja",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -3.9812,
+      "longitud": -79.212,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Urgencias"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Centeno",
+      "ciudad": "Manta",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.9545,
+      "longitud": -80.7128,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Hospital del Sol",
+      "ciudad": "Manta",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -0.9566,
+      "longitud": -80.7132,
+      "especialidades": [],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "APROFE",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.191,
+      "longitud": -79.8856,
+      "especialidades": [
+        "Ginecología",
+        "Planificación Familiar",
+        "Cirugía General",
+        "Pediatría",
+        "Medicina Preventiva",
+        "Salud Reproductiva"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "Clínica Ángeles",
+      "ciudad": "Guayaquil",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.15,
+      "longitud": -79.902,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Cardiología",
+        "Neurología"
+      ],
+      "nota": "",
+      "grupo": ""
+    },
+    {
+      "nombre": "UEES Clinic",
+      "ciudad": "Guayaquil (Samborondón)",
+      "aseguradoras": [
+        "bmi"
+      ],
+      "latitud": -2.1497,
+      "longitud": -79.8629,
+      "especialidades": [
+        "Cirugía General",
+        "Ginecología",
+        "Traumatología",
+        "Medicina Interna",
+        "Pediatría",
+        "Urgencias",
+        "Laboratorio"
+      ],
+      "nota": "",
+      "grupo": ""
+    }
+  ],
+  "por_aseguradora": {
+    "saludsa": [
+      {
+        "nombre": "Hospital Vozandes",
+        "ciudad": "Quito",
+        "nota": "Cobertura diferenciada 80% planes Star 15K/Lite, 90% Star 30K/Lite",
+        "latitud": -0.1922,
+        "longitud": -78.4953,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía General",
+          "Ginecología",
+          "Pediatría",
+          "Traumatología",
+          "Medicina Interna",
+          "Oftalmología",
+          "Neurología",
+          "Oncología",
+          "UCI",
+          "Gastroenterología"
+        ]
+      },
+      {
+        "nombre": "Centrales Médicas Veris",
+        "ciudad": "Multiple",
+        "nota": "Cobertura ambulatoria diferenciada 40-50%",
+        "latitud": -0.1766,
+        "longitud": -78.4862,
+        "especialidades": [
+          "Medicina General",
+          "Pediatría",
+          "Ginecología",
+          "Laboratorio Clínico",
+          "Urgencias Ambulatorias",
+          "Imagenología",
+          "Traumatología"
+        ]
+      }
+    ],
+    "humana": [
+      {
+        "nombre": "Hospital Metropolitano",
+        "ciudad": "Quito",
+        "grupo": "Conclina",
+        "latitud": -0.1833,
+        "longitud": -78.4833,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía Cardiovascular",
+          "Neurología",
+          "Oncología",
+          "Traumatología",
+          "Ginecología",
+          "Obstetricia",
+          "Pediatría",
+          "Cirugía General",
+          "UCI",
+          "Neonatología",
+          "Gastroenterología",
+          "Urología",
+          "Ortopedia",
+          "Radioterapia",
+          "Hematología",
+          "Neumología"
+        ]
+      },
+      {
+        "nombre": "Omni Hospital",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1468,
+        "longitud": -79.8992,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía Cardiovascular",
+          "Neurología",
+          "Oncología",
+          "Ginecología",
+          "Traumatología",
+          "Cirugía General",
+          "UCI",
+          "Neonatología",
+          "Gastroenterología",
+          "Urología",
+          "Oftalmología",
+          "Cirugía Plástica",
+          "Neumología"
+        ]
+      },
+      {
+        "nombre": "Hospital Clínica Kennedy",
+        "ciudad": "Guayaquil"
+      },
+      {
+        "nombre": "Hospital Padre Carollo / Fundación Tierra Nueva",
+        "ciudad": "Quito",
+        "latitud": -0.2959,
+        "longitud": -78.5513,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Pediatría",
+          "Medicina Interna",
+          "Traumatología",
+          "Cardiología",
+          "Medicina Comunitaria"
+        ]
+      },
+      {
+        "nombre": "Clínica de Especialidades Tumbaco",
+        "ciudad": "Quito",
+        "latitud": -0.2171,
+        "longitud": -78.4041,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Cardiología"
+        ]
+      },
+      {
+        "nombre": "SIME USFQ",
+        "ciudad": "Quito",
+        "latitud": -0.2111,
+        "longitud": -78.4319,
+        "especialidades": [
+          "Medicina General",
+          "Pediatría",
+          "Ginecología",
+          "Laboratorio",
+          "Urgencias Ambulatorias",
+          "Imagenología"
+        ]
+      },
+      {
+        "nombre": "Clínica María Auxiliadora",
+        "ciudad": "Quito",
+        "latitud": -0.1933,
+        "longitud": -78.4956
+      },
+      {
+        "nombre": "Sur Hospital",
+        "ciudad": "Guayaquil",
+        "latitud": -2.2257,
+        "longitud": -79.9087,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Pediatría",
+          "Medicina Interna"
+        ]
+      },
+      {
+        "nombre": "Mediglobal",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1536,
+        "longitud": -79.896,
+        "especialidades": [
+          "Medicina General",
+          "Pediatría",
+          "Ginecología",
+          "Urgencias Ambulatorias",
+          "Laboratorio"
+        ]
+      },
+      {
+        "nombre": "Clínica San Francisco",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1389,
+        "longitud": -79.8945,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "Clínica Santa María",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1743,
+        "longitud": -79.9141,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "Clínica Panamericana",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1917,
+        "longitud": -79.8892,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Pediatría",
+          "Traumatología",
+          "Medicina Interna",
+          "Cardiología",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "Clínica Central Aprofe",
+        "ciudad": "Guayaquil",
+        "latitud": -2.191,
+        "longitud": -79.8856,
+        "especialidades": [
+          "Ginecología",
+          "Planificación Familiar",
+          "Cirugía General",
+          "Pediatría",
+          "Medicina Preventiva",
+          "Salud Reproductiva"
+        ]
+      },
+      {
+        "nombre": "Clínica Kennedy La Alborada",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1166,
+        "longitud": -79.8994,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Neurología",
+          "Pediatría",
+          "UCI"
+        ]
+      },
+      {
+        "nombre": "Medilink",
+        "ciudad": "Quito y Guayaquil",
+        "latitud": -0.1766,
+        "longitud": -78.4862,
+        "especialidades": [
+          "Medicina General",
+          "Pediatría",
+          "Ginecología",
+          "Urgencias Ambulatorias",
+          "Laboratorio",
+          "Imagenología"
+        ]
+      }
+    ],
+    "bupa": [
+      {
+        "nombre": "Bupa",
+        "latitud": -0.201,
+        "longitud": -78.491
+      },
+      {
+        "nombre": "BIODIMED",
+        "latitud": -0.201,
+        "longitud": -78.491,
+        "especialidades": [
+          "Laboratorio Clínico",
+          "Imagenología",
+          "Medicina General",
+          "Pediatría"
+        ]
+      },
+      {
+        "nombre": "Clínica de la mujer",
+        "latitud": -0.1742,
+        "longitud": -78.4801,
+        "especialidades": [
+          "Ginecología",
+          "Obstetricia",
+          "Neonatología",
+          "Fertilidad",
+          "Perinatología",
+          "Cirugía Ginecológica"
+        ]
+      },
+      {
+        "nombre": "Clínica DLM",
+        "latitud": -0.205,
+        "longitud": -78.49
+      },
+      {
+        "nombre": "Clínica la paz",
+        "latitud": -0.198,
+        "longitud": -78.495
+      },
+      {
+        "nombre": "Grupo Hospitalario Kennedy",
+        "latitud": -2.1559,
+        "longitud": -79.9016,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Neurología",
+          "Oncología",
+          "Pediatría",
+          "UCI",
+          "Gastroenterología",
+          "Urología"
+        ]
+      },
+      {
+        "nombre": "Hospital Clínica Panamericana",
+        "latitud": -2.1917,
+        "longitud": -79.8892,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Pediatría",
+          "Traumatología",
+          "Medicina Interna",
+          "Cardiología",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "INTERLAB",
+        "latitud": -2.1853,
+        "longitud": -79.9028,
+        "especialidades": [
+          "Laboratorio Clínico",
+          "Microbiología",
+          "Biología Molecular",
+          "Anatomía Patológica"
+        ]
+      },
+      {
+        "nombre": "San Agustín Laboratorio",
+        "latitud": -3.9985,
+        "longitud": -79.21
+      },
+      {
+        "nombre": "Médikal"
+      },
+      {
+        "nombre": "OMNI Hospital",
+        "latitud": -2.1468,
+        "longitud": -79.8992,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía Cardiovascular",
+          "Neurología",
+          "Oncología",
+          "Ginecología",
+          "Traumatología",
+          "Cirugía General",
+          "UCI",
+          "Neonatología",
+          "Gastroenterología",
+          "Urología",
+          "Oftalmología",
+          "Cirugía Plástica",
+          "Neumología"
+        ]
+      },
+      {
+        "nombre": "Praxmed",
+        "latitud": -0.203,
+        "longitud": -78.492,
+        "especialidades": [
+          "Medicina General",
+          "Pediatría",
+          "Ginecología",
+          "Urgencias Ambulatorias",
+          "Laboratorio"
+        ]
+      },
+      {
+        "nombre": "San Diego Centro de Especialidades",
+        "latitud": -0.19,
+        "longitud": -78.5
+      },
+      {
+        "nombre": "Sistemas Médicos",
+        "latitud": -0.21,
+        "longitud": -78.495
+      },
+      {
+        "nombre": "SOLCA",
+        "latitud": -0.148,
+        "longitud": -78.4817,
+        "especialidades": [
+          "Oncología",
+          "Quimioterapia",
+          "Radioterapia",
+          "Cirugía Oncológica",
+          "Hematología",
+          "Onco-Pediatría"
+        ]
+      },
+      {
+        "nombre": "VERIS",
+        "latitud": -0.1766,
+        "longitud": -78.4862,
+        "especialidades": [
+          "Medicina General",
+          "Pediatría",
+          "Ginecología",
+          "Laboratorio Clínico",
+          "Urgencias Ambulatorias",
+          "Imagenología",
+          "Traumatología"
+        ]
+      },
+      {
+        "nombre": "UEESCLINIC",
+        "latitud": -2.1497,
+        "longitud": -79.8629
+      },
+      {
+        "nombre": "AXXIS",
+        "latitud": -0.1697,
+        "longitud": -78.4838,
+        "especialidades": [
+          "Gastroenterología",
+          "Cirugía Bariátrica",
+          "Cardiología",
+          "Neurología",
+          "Oncología",
+          "Cirugía General",
+          "Pediatría",
+          "Ginecología",
+          "Ortopedia",
+          "Urología"
+        ]
+      },
+      {
+        "nombre": "Clínica Guayaquil",
+        "latitud": -2.1931,
+        "longitud": -79.8858,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Pediatría",
+          "Traumatología",
+          "Medicina Interna",
+          "Cardiología"
+        ]
+      },
+      {
+        "nombre": "Metrored",
+        "latitud": -0.1766,
+        "longitud": -78.4862,
+        "especialidades": [
+          "Medicina General",
+          "Pediatría",
+          "Ginecología",
+          "Laboratorio Clínico",
+          "Medicina Preventiva",
+          "Imagenología",
+          "Urgencias Ambulatorias"
+        ]
+      },
+      {
+        "nombre": "INTERHOSPITAL",
+        "latitud": -2.2,
+        "longitud": -80.0234,
+        "especialidades": [
+          "Oncología",
+          "Cirugía General",
+          "Cardiología",
+          "Neurología",
+          "Ginecología",
+          "Traumatología",
+          "UCI",
+          "Hematología",
+          "Neumología",
+          "Cirugía Cardiovascular"
+        ]
+      },
+      {
+        "nombre": "Palacio Alcivar Laboratorio"
+      },
+      {
+        "nombre": "Clínica Metropolitana",
+        "latitud": -0.195,
+        "longitud": -78.503,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría"
+        ]
+      },
+      {
+        "nombre": "Hospital San Gregorio",
+        "latitud": -0.205,
+        "longitud": -78.495
+      },
+      {
+        "nombre": "Hospital Clínica del Pacífico",
+        "latitud": -2.6438,
+        "longitud": -80.3899
+      },
+      {
+        "nombre": "PARAMI",
+        "latitud": -2.1559,
+        "longitud": -79.9016,
+        "especialidades": [
+          "Medicina General",
+          "Pediatría",
+          "Ginecología",
+          "Urgencias Ambulatorias",
+          "Laboratorio"
+        ]
+      },
+      {
+        "nombre": "PraxMED",
+        "latitud": -0.203,
+        "longitud": -78.492,
+        "especialidades": [
+          "Medicina General",
+          "Pediatría",
+          "Ginecología",
+          "Urgencias Ambulatorias",
+          "Laboratorio"
+        ]
+      },
+      {
+        "nombre": "SIME",
+        "latitud": -0.2111,
+        "longitud": -78.4319,
+        "especialidades": [
+          "Medicina General",
+          "Pediatría",
+          "Ginecología",
+          "Laboratorio",
+          "Urgencias Ambulatorias",
+          "Imagenología"
+        ]
+      },
+      {
+        "nombre": "Interhospital",
+        "latitud": -2.2,
+        "longitud": -80.0234,
+        "especialidades": [
+          "Oncología",
+          "Cirugía General",
+          "Cardiología",
+          "Neurología",
+          "Ginecología",
+          "Traumatología",
+          "UCI",
+          "Hematología",
+          "Neumología",
+          "Cirugía Cardiovascular"
+        ]
+      },
+      {
+        "nombre": "MediLink",
+        "latitud": -0.1766,
+        "longitud": -78.4862,
+        "especialidades": [
+          "Medicina General",
+          "Pediatría",
+          "Ginecología",
+          "Urgencias Ambulatorias",
+          "Laboratorio",
+          "Imagenología"
+        ]
+      },
+      {
+        "nombre": "HOSPICOR",
+        "latitud": -0.195,
+        "longitud": -78.503
+      },
+      {
+        "nombre": "Clínica Metropolitana",
+        "latitud": -0.195,
+        "longitud": -78.503,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría"
+        ]
+      },
+      {
+        "nombre": "Clínica Medilab",
+        "latitud": -3.986,
+        "longitud": -79.205,
+        "especialidades": [
+          "Laboratorio Clínico",
+          "Imagenología",
+          "Medicina General",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "Clínicas del Salto",
+        "latitud": -0.21,
+        "longitud": -78.5
+      },
+      {
+        "nombre": "Cerid",
+        "latitud": -2.14,
+        "longitud": -79.895
+      },
+      {
+        "nombre": "IMAB",
+        "latitud": -0.2,
+        "longitud": -78.49
+      }
+    ],
+    "bmi": [
+      {
+        "nombre": "Hospital del Río",
+        "ciudad": "Cuenca",
+        "latitud": -2.8978,
+        "longitud": -79.002,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía Cardiovascular",
+          "Cirugía General",
+          "Ginecología",
+          "Neurología",
+          "Traumatología",
+          "UCI",
+          "Oncología",
+          "Pediatría",
+          "Gastroenterología"
+        ]
+      },
+      {
+        "nombre": "Hospital Monte Sinaí",
+        "ciudad": "Cuenca",
+        "latitud": -2.9143,
+        "longitud": -79.0186,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Pediatría",
+          "Medicina Interna",
+          "Cardiología",
+          "Neurología",
+          "UCI",
+          "Oncología"
+        ]
+      },
+      {
+        "nombre": "Hospital San Juan de Dios",
+        "ciudad": "Cuenca",
+        "latitud": -2.905,
+        "longitud": -79.0012,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Pediatría",
+          "Medicina Interna",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "Hospital Santa Inés",
+        "ciudad": "Cuenca",
+        "latitud": -2.9066,
+        "longitud": -79.0077,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Pediatría",
+          "Medicina Interna",
+          "Cardiología",
+          "Neurología",
+          "UCI"
+        ]
+      },
+      {
+        "nombre": "Clínica Santa Ana",
+        "ciudad": "Cuenca",
+        "latitud": -2.9156,
+        "longitud": -79.0238,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Pediatría",
+          "Medicina Interna",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "Hospital Alcívar",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1853,
+        "longitud": -79.9028,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía Cardiovascular",
+          "Traumatología",
+          "Cirugía General",
+          "Ginecología",
+          "Neurología",
+          "Oncología",
+          "UCI",
+          "Flebología"
+        ]
+      },
+      {
+        "nombre": "Omni Hospital",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1468,
+        "longitud": -79.8992,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía Cardiovascular",
+          "Neurología",
+          "Oncología",
+          "Ginecología",
+          "Traumatología",
+          "Cirugía General",
+          "UCI",
+          "Neonatología",
+          "Gastroenterología",
+          "Urología",
+          "Oftalmología",
+          "Cirugía Plástica",
+          "Neumología"
+        ]
+      },
+      {
+        "nombre": "Hospital Clínica Kennedy Policentro",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1559,
+        "longitud": -79.9016,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Neurología",
+          "Oncología",
+          "Pediatría",
+          "UCI",
+          "Gastroenterología",
+          "Urología",
+          "Cirugía Cardiovascular"
+        ]
+      },
+      {
+        "nombre": "Clínica Kennedy Samborondón",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1407,
+        "longitud": -79.8607,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Neurología",
+          "Pediatría",
+          "UCI",
+          "Oncología",
+          "Gastroenterología"
+        ]
+      },
+      {
+        "nombre": "Interhospital",
+        "ciudad": "Guayaquil",
+        "latitud": -2.2,
+        "longitud": -80.0234,
+        "especialidades": [
+          "Oncología",
+          "Cirugía General",
+          "Cardiología",
+          "Neurología",
+          "Ginecología",
+          "Traumatología",
+          "UCI",
+          "Hematología",
+          "Neumología",
+          "Cirugía Cardiovascular"
+        ]
+      },
+      {
+        "nombre": "SOLCA Núcleo de Guayaquil",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1703,
+        "longitud": -79.88,
+        "especialidades": [
+          "Oncología",
+          "Quimioterapia",
+          "Radioterapia",
+          "Cirugía Oncológica",
+          "Hematología",
+          "Braquiterapia"
+        ]
+      },
+      {
+        "nombre": "Sur Hospital",
+        "ciudad": "Guayaquil",
+        "latitud": -2.2257,
+        "longitud": -79.9087,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Pediatría",
+          "Medicina Interna"
+        ]
+      },
+      {
+        "nombre": "Hospital Roberto Gilbert",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1598,
+        "longitud": -79.9083,
+        "especialidades": [
+          "Pediatría",
+          "Neonatología",
+          "Cirugía Pediátrica",
+          "Medicina Interna",
+          "Ginecología"
+        ]
+      },
+      {
+        "nombre": "Hospital de la Mujer Alfredo Paulson",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1598,
+        "longitud": -79.9083,
+        "especialidades": [
+          "Ginecología",
+          "Obstetricia",
+          "Neonatología",
+          "Perinatología",
+          "Fertilidad"
+        ]
+      },
+      {
+        "nombre": "Hospital Luis Vernaza",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1906,
+        "longitud": -79.8825,
+        "especialidades": [
+          "Cirugía General",
+          "Medicina Interna",
+          "Cardiología",
+          "Neurología",
+          "Traumatología",
+          "UCI",
+          "Quemados",
+          "Nefrología"
+        ]
+      },
+      {
+        "nombre": "Clínica Alborada",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1166,
+        "longitud": -79.8994,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Pediatría",
+          "Medicina Interna",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "Clínica Milenium",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1523,
+        "longitud": -79.8877,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Cardiología"
+        ]
+      },
+      {
+        "nombre": "Clínica Rendón",
+        "ciudad": "Guayaquil",
+        "latitud": -2.201,
+        "longitud": -79.921,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría"
+        ]
+      },
+      {
+        "nombre": "Clínica La Unión",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1555,
+        "longitud": -79.9073,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Pediatría",
+          "Medicina Interna",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "Hospital Clínica San Francisco",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1389,
+        "longitud": -79.8945,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "Hospital Metropolitano",
+        "ciudad": "Quito",
+        "latitud": -0.1833,
+        "longitud": -78.4833,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía Cardiovascular",
+          "Neurología",
+          "Oncología",
+          "Traumatología",
+          "Ginecología",
+          "Obstetricia",
+          "Pediatría",
+          "Cirugía General",
+          "UCI",
+          "Neonatología",
+          "Gastroenterología",
+          "Urología",
+          "Ortopedia",
+          "Radioterapia",
+          "Hematología",
+          "Neumología"
+        ]
+      },
+      {
+        "nombre": "Hospital Vozandes",
+        "ciudad": "Quito",
+        "latitud": -0.1922,
+        "longitud": -78.4953,
+        "especialidades": [
+          "Cardiología",
+          "Cirugía General",
+          "Ginecología",
+          "Pediatría",
+          "Traumatología",
+          "Medicina Interna",
+          "Oftalmología",
+          "Neurología",
+          "Oncología",
+          "UCI",
+          "Gastroenterología"
+        ]
+      },
+      {
+        "nombre": "Axxis Hospital",
+        "ciudad": "Quito",
+        "latitud": -0.1697,
+        "longitud": -78.4838,
+        "especialidades": [
+          "Gastroenterología",
+          "Cirugía Bariátrica",
+          "Cardiología",
+          "Neurología",
+          "Oncología",
+          "Cirugía General",
+          "Pediatría",
+          "Ginecología",
+          "Ortopedia",
+          "Urología"
+        ]
+      },
+      {
+        "nombre": "NovaCLÍNICA Santa Cecilia",
+        "ciudad": "Quito",
+        "latitud": -0.2197,
+        "longitud": -78.5068,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Pediatría",
+          "Traumatología",
+          "Medicina Interna",
+          "Cardiología",
+          "UCI"
+        ]
+      },
+      {
+        "nombre": "Hospital Alianza",
+        "ciudad": "Quito",
+        "latitud": -0.2109,
+        "longitud": -78.498,
+        "especialidades": [
+          "Traumatología",
+          "Ortopedia",
+          "Cirugía General",
+          "Neurología",
+          "Medicina Interna",
+          "Ginecología",
+          "Pediatría"
+        ]
+      },
+      {
+        "nombre": "Hospital Padre Carollo",
+        "ciudad": "Quito",
+        "latitud": -0.2959,
+        "longitud": -78.5513,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Pediatría",
+          "Medicina Interna",
+          "Traumatología",
+          "Cardiología",
+          "Medicina Comunitaria"
+        ]
+      },
+      {
+        "nombre": "NorthHospital",
+        "ciudad": "Quito"
+      },
+      {
+        "nombre": "Hospital de los Valles",
+        "ciudad": "Quito (Cumbayá)",
+        "latitud": -0.2163,
+        "longitud": -78.4307,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Pediatría",
+          "Traumatología",
+          "Cardiología",
+          "Neurología",
+          "Medicina Interna",
+          "UCI",
+          "Oncología",
+          "Gastroenterología"
+        ]
+      },
+      {
+        "nombre": "SOLCA Núcleo de Quito",
+        "ciudad": "Quito",
+        "latitud": -0.148,
+        "longitud": -78.4817,
+        "especialidades": [
+          "Oncología",
+          "Quimioterapia",
+          "Radioterapia",
+          "Cirugía Oncológica",
+          "Hematología",
+          "Onco-Pediatría"
+        ]
+      },
+      {
+        "nombre": "Clínica de la Mujer",
+        "ciudad": "Quito",
+        "latitud": -0.1742,
+        "longitud": -78.4801,
+        "especialidades": [
+          "Ginecología",
+          "Obstetricia",
+          "Neonatología",
+          "Fertilidad",
+          "Perinatología",
+          "Cirugía Ginecológica"
+        ]
+      },
+      {
+        "nombre": "Clínica Internacional",
+        "ciudad": "Quito",
+        "latitud": -0.2136,
+        "longitud": -78.5079,
+        "especialidades": [
+          "Cardiología",
+          "Neurología",
+          "Cirugía General",
+          "Pediatría",
+          "Traumatología",
+          "Ginecología",
+          "Medicina Interna",
+          "UCI"
+        ]
+      },
+      {
+        "nombre": "Clínica del Río",
+        "ciudad": "Quito"
+      },
+      {
+        "nombre": "Alfa Hospital",
+        "ciudad": "Ibarra",
+        "latitud": 0.3543,
+        "longitud": -78.1272,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Cardiología",
+          "UCI"
+        ]
+      },
+      {
+        "nombre": "Nova Clínica Moderna / Climoder",
+        "ciudad": "Ibarra",
+        "latitud": -0.227,
+        "longitud": -78.5156,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Cardiología"
+        ]
+      },
+      {
+        "nombre": "RioHospital",
+        "ciudad": "Riobamba",
+        "latitud": -1.666,
+        "longitud": -78.645,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "UCI"
+        ]
+      },
+      {
+        "nombre": "Clínica Metropolitana Metrisa",
+        "ciudad": "Riobamba",
+        "latitud": -1.6723,
+        "longitud": -78.6435,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría"
+        ]
+      },
+      {
+        "nombre": "Clínica Durán",
+        "ciudad": "Ambato",
+        "latitud": -1.248,
+        "longitud": -78.617,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Cardiología",
+          "UCI"
+        ]
+      },
+      {
+        "nombre": "Hospital Privado Tungurahua",
+        "ciudad": "Ambato",
+        "latitud": -1.248,
+        "longitud": -78.6201,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Cardiología",
+          "UCI"
+        ]
+      },
+      {
+        "nombre": "Hospital Santa Inés de Ambato",
+        "ciudad": "Ambato",
+        "latitud": -1.2491,
+        "longitud": -78.6241,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Cardiología"
+        ]
+      },
+      {
+        "nombre": "Hospital González Granda",
+        "ciudad": "Lago Agrio",
+        "latitud": 0.0866,
+        "longitud": -76.8891,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "NovaCLÍNICA Santa Anita",
+        "ciudad": "Santo Domingo",
+        "latitud": -0.2608,
+        "longitud": -79.1734,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría"
+        ]
+      },
+      {
+        "nombre": "Clínica Araujo",
+        "ciudad": "Santo Domingo",
+        "latitud": -0.2477,
+        "longitud": -79.1754,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Cardiología",
+          "UCI"
+        ]
+      },
+      {
+        "nombre": "Clínica Santiago",
+        "ciudad": "Santo Domingo",
+        "latitud": -0.2551,
+        "longitud": -79.1804,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría"
+        ]
+      },
+      {
+        "nombre": "Clínica Colón",
+        "ciudad": "Esmeraldas",
+        "latitud": 0.9553,
+        "longitud": -79.6523,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "Hospital Clínica San Agustín",
+        "ciudad": "Loja",
+        "latitud": -3.9985,
+        "longitud": -79.21,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Cardiología"
+        ]
+      },
+      {
+        "nombre": "Hospital UTPL - Santa Inés",
+        "ciudad": "Loja",
+        "latitud": -3.9812,
+        "longitud": -79.212,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "Clínica Centeno",
+        "ciudad": "Manta",
+        "latitud": -0.9545,
+        "longitud": -80.7128
+      },
+      {
+        "nombre": "Clínica Hospital del Sol",
+        "ciudad": "Manta",
+        "latitud": -0.9566,
+        "longitud": -80.7132
+      },
+      {
+        "nombre": "APROFE",
+        "ciudad": "Guayaquil",
+        "latitud": -2.191,
+        "longitud": -79.8856,
+        "especialidades": [
+          "Ginecología",
+          "Planificación Familiar",
+          "Cirugía General",
+          "Pediatría",
+          "Medicina Preventiva",
+          "Salud Reproductiva"
+        ]
+      },
+      {
+        "nombre": "Clínica Guayaquil",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1931,
+        "longitud": -79.8858,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Pediatría",
+          "Traumatología",
+          "Medicina Interna",
+          "Cardiología"
+        ]
+      },
+      {
+        "nombre": "Clínica Panamericana",
+        "ciudad": "Guayaquil",
+        "latitud": -2.1917,
+        "longitud": -79.8892,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Pediatría",
+          "Traumatología",
+          "Medicina Interna",
+          "Cardiología",
+          "Urgencias"
+        ]
+      },
+      {
+        "nombre": "Clínica Ángeles",
+        "ciudad": "Guayaquil",
+        "latitud": -2.15,
+        "longitud": -79.902,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Cardiología",
+          "Neurología"
+        ]
+      },
+      {
+        "nombre": "UEES Clinic",
+        "ciudad": "Guayaquil (Samborondón)",
+        "latitud": -2.1497,
+        "longitud": -79.8629,
+        "especialidades": [
+          "Cirugía General",
+          "Ginecología",
+          "Traumatología",
+          "Medicina Interna",
+          "Pediatría",
+          "Urgencias",
+          "Laboratorio"
+        ]
+      }
+    ]
+  }
+}

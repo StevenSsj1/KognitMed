@@ -43,10 +43,34 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     if not db_connected:
         log.warning("database_connection_not_ready_at_startup")
 
+    # Initialize and verify ChromaDB connection (file/persistent mode — no server needed)
+    from kognitmed.infrastructure.database.chroma import ping_chroma, close_chroma_client, get_chroma_client
+    chroma_connected = ping_chroma(settings)
+    if not chroma_connected:
+        log.warning("chroma_connection_not_ready_at_startup")
+    else:
+        # Ingesta automática de la red médica si la colección aún no existe
+        from pathlib import Path
+        from kognitmed.infrastructure.database.red_medica_store import RedMedicaIngestService
+        chroma_client = get_chroma_client(settings)
+        ingest_svc = RedMedicaIngestService(chroma_client)
+        info = ingest_svc.get_collection_info()
+        if info["total_documents"] == 0:
+            dataset_path = Path(__file__).parent.parent.parent.parent.parent / "doc" / "dataset_red_medica_enriched.json"
+            if dataset_path.exists():
+                result = ingest_svc.ingest_from_file(dataset_path)
+                log.info("red_medica_auto_ingested", **result)
+            else:
+                log.warning("red_medica_dataset_not_found", path=str(dataset_path))
+        else:
+            log.info("red_medica_already_indexed", total=info["total_documents"])
+
     yield
 
     # Clean up database client connection
     close_mongo_client()
+    # Release ChromaDB client reference
+    close_chroma_client()
     log.info("kognitmed_shutdown")
 
 
