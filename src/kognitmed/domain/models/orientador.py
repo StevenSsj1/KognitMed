@@ -87,12 +87,19 @@ class SymptomAnalysis(BaseModel):
 # ── Recomendación de beneficio ────────────────────────────────────────────────
 
 class HospitalRecommendation(BaseModel):
-    """Hospital recomendado con copago calculado."""
+    """Hospital recomendado con copago calculado y datos enriquecidos desde la red médica."""
 
     name: str
     copay_usd: float
     is_in_network: bool
     notes: Optional[str] = None
+    # Datos enriquecidos desde ChromaDB (red médica real)
+    ciudad: Optional[str] = None
+    aseguradoras: list[str] = Field(default_factory=list)
+    especialidades: list[str] = Field(default_factory=list)
+    latitud: Optional[float] = None
+    longitud: Optional[float] = None
+    relevance_score: Optional[float] = None
 
 
 class BenefitRecommendation(BaseModel):

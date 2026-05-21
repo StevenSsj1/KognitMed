@@ -193,33 +193,44 @@ class RedMedicaSearchService:
     def search(
         self,
         query: str,
-        n_results: int = 5,
+        n_results: int = 10,
         ciudad: str | None = None,
         aseguradora: str | None = None,
+        specialty: str | None = None,
     ) -> list[dict[str, Any]]:
         """
         Búsqueda semántica con filtros opcionales.
 
         Args:
             query: Texto de búsqueda (ej: "cardiología urgente").
-            n_results: Número máximo de resultados.
+            n_results: Número máximo de resultados a retornar.
             ciudad: Filtro exacto por ciudad (ej: "Quito").
-            aseguradora: Filtro por aseguradora en metadata JSON.
+            aseguradora: Filtro por aseguradora (post-filtro en metadata JSON).
+            specialty: Filtro exacto por especialidad (post-filtro en metadata JSON).
+                       Cuando se activa, se hace over-fetch total para no perder resultados.
 
         Returns:
-            Lista de hospitales con sus metadatos y score de relevancia.
+            Lista de hospitales ordenados por relevancia semántica.
         """
         collection = self._get_collection()
+        total_docs = collection.count()
+        if total_docs == 0:
+            return []
 
-        # Construir where clause para filtros exactos
+        # Where clause solo para campos indexados por Chroma (strings exactos)
         where: dict[str, Any] | None = None
         if ciudad:
             where = {"ciudad": {"$eq": ciudad}}
 
+        # Si hay filtros por specialty o aseguradora (que son JSON arrays en metadata),
+        # Chroma no puede filtrarlos directamente → over-fetch completo y post-filtrar.
+        needs_post_filter = bool(specialty or aseguradora)
+        fetch_count = total_docs if needs_post_filter else min(n_results * 3, total_docs)
+
         try:
             results = collection.query(
                 query_texts=[query],
-                n_results=min(n_results * 2, collection.count() or 1),  # over-fetch para filtrar
+                n_results=fetch_count,
                 where=where,
                 include=["documents", "metadatas", "distances"],
             )
@@ -227,32 +238,30 @@ class RedMedicaSearchService:
             log.error("red_medica_search_failed", error=str(exc))
             return []
 
-        hospitals: list[dict[str, Any]] = []
         docs = (results.get("documents") or [[]])[0]
         metas = (results.get("metadatas") or [[]])[0]
         dists = (results.get("distances") or [[]])[0]
 
+        hospitals: list[dict[str, Any]] = []
         for doc, meta, dist in zip(docs, metas, dists):
-            # Filtro por aseguradora en metadata JSON (Chroma no soporta contains en arrays)
+            especialidades: list[str] = json.loads(meta.get("especialidades", "[]"))
+            aseg_list: list[str] = json.loads(meta.get("aseguradoras", "[]"))
+
+            # Post-filtro por especialidad (case-insensitive)
+            if specialty:
+                esp_lower = [e.lower() for e in especialidades]
+                if specialty.lower() not in esp_lower:
+                    continue
+
+            # Post-filtro por aseguradora (case-insensitive)
             if aseguradora:
-                aseg_list: list[str] = json.loads(meta.get("aseguradoras", "[]"))
                 if aseguradora.lower() not in [a.lower() for a in aseg_list]:
                     continue
 
-            especialidades: list[str] = json.loads(meta.get("especialidades", "[]"))
-
-            hospitals.append({
-                "nombre": meta.get("nombre", ""),
-                "ciudad": meta.get("ciudad", ""),
-                "aseguradoras": json.loads(meta.get("aseguradoras", "[]")),
-                "especialidades": especialidades,
-                "latitud": float(meta["latitud"]) if meta.get("latitud") else None,
-                "longitud": float(meta["longitud"]) if meta.get("longitud") else None,
-                "nota": meta.get("nota", ""),
-                "grupo": meta.get("grupo", ""),
-                "relevance_score": round(1 - dist, 4),  # cosine: 1=idéntico, 0=irrelevante
-                "texto_indexado": doc,
-            })
+            hospitals.append(self._build_hospital_dict(
+                doc=doc, meta=meta, dist=dist,
+                especialidades=especialidades, aseg_list=aseg_list,
+            ))
 
             if len(hospitals) >= n_results:
                 break
@@ -260,9 +269,11 @@ class RedMedicaSearchService:
         log.info(
             "red_medica_search",
             query=query[:60],
+            fetched=len(docs),
             results=len(hospitals),
             ciudad=ciudad,
             aseguradora=aseguradora,
+            specialty=specialty,
         )
         return hospitals
 
@@ -271,13 +282,45 @@ class RedMedicaSearchService:
         specialty: str,
         aseguradora: str | None = None,
         ciudad: str | None = None,
-        n_results: int = 5,
+        n_results: int = 10,
     ) -> list[dict[str, Any]]:
-        """Búsqueda orientada a especialidad médica específica."""
-        query = f"Hospital con especialidad {specialty} para atención médica"
+        """
+        Búsqueda por especialidad médica exacta.
+
+        Garantiza que TODOS los resultados tienen la especialidad indicada
+        usando post-filtro sobre metadata. Semánticamente ordena por relevancia.
+        """
+        query = f"Hospital con especialidad en {specialty} atención médica pacientes"
         return self.search(
             query=query,
             n_results=n_results,
             ciudad=ciudad,
             aseguradora=aseguradora,
+            specialty=specialty,
         )
+
+    # ── Helpers privados ──────────────────────────────────────────────────────
+
+    @staticmethod
+    def _build_hospital_dict(
+        doc: str,
+        meta: dict[str, Any],
+        dist: float,
+        especialidades: list[str],
+        aseg_list: list[str],
+    ) -> dict[str, Any]:
+        """Construye el dict de respuesta para un hospital."""
+        lat = meta.get("latitud")
+        lon = meta.get("longitud")
+        return {
+            "nombre": meta.get("nombre", ""),
+            "ciudad": meta.get("ciudad", ""),
+            "aseguradoras": aseg_list,
+            "especialidades": especialidades,
+            "latitud": float(lat) if lat else None,
+            "longitud": float(lon) if lon else None,
+            "nota": meta.get("nota", ""),
+            "grupo": meta.get("grupo", ""),
+            "relevance_score": round(1 - dist, 4),
+            "texto_indexado": doc,
+        }

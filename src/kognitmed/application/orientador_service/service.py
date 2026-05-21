@@ -24,6 +24,7 @@ from kognitmed.application.orientador_service.schemas import (
 from kognitmed.config import Settings
 from kognitmed.domain.models.orientador import SymptomAnalysis, UrgencyLevel
 from kognitmed.domain.prompts.orientador_prompts import SYMPTOM_INTENT_PROMPT
+from kognitmed.infrastructure.database.red_medica_store import RedMedicaSearchService
 from kognitmed.infrastructure.llm_providers.base_provider import AbstractLLMProvider
 from kognitmed.infrastructure.memory.in_memory_store import InMemoryConversationStore
 
@@ -47,11 +48,13 @@ class MediOrientadorService:
         synthesis_llm: AbstractLLMProvider,
         memory_store: InMemoryConversationStore,
         settings: Settings,
+        search_service: RedMedicaSearchService | None = None,
     ) -> None:
         self._extraction_llm = extraction_llm   # Layer extracción: rápido/barato
         self._synthesis_llm = synthesis_llm     # Layer síntesis: potente/capaz
         self._memory = memory_store
         self._settings = settings
+        self._search_service = search_service   # Red médica en ChromaDB
 
         # Instancias de los 3 layers
         self._intake = IntakeLayer()
@@ -69,7 +72,7 @@ class MediOrientadorService:
             conversation_id=cid, role="user", content=request.message
         )
 
-        log.info("orientador_start", conversation_id=str(cid), provider=self._llm.provider_name)
+        log.info("orientador_start", conversation_id=str(cid), provider=self._extraction_llm.provider_name)
 
         # ── Layer 1: Intake ───────────────────────────────────────────────────
         intake: IntakeResult = self._intake.process(
@@ -86,7 +89,7 @@ class MediOrientadorService:
                 reply=error_reply,
                 urgency=UrgencyLevel.NORMAL,
                 recommendation=None,
-                provider=self._llm.provider_name,
+                provider=self._extraction_llm.provider_name,
             )
 
         # Cortocircuito de emergencia detectado por el intake (sin LLM)
@@ -101,14 +104,18 @@ class MediOrientadorService:
                 reply=_EMERGENCY_REPLY,
                 urgency=UrgencyLevel.EMERGENCY,
                 recommendation=None,
-                provider=self._llm.provider_name,
+                provider=self._extraction_llm.provider_name,
             )
 
         # ── LLM: Extracción de síntomas (entre Layer 1 y 2) ──────────────────
         analysis: SymptomAnalysis = await self._extract_symptoms(intake.clean_message)
 
-        # ── Layer 2: Matcher ──────────────────────────────────────────────────
-        match = self._matcher.match(intake=intake, analysis=analysis)
+        # ── Layer 2: Matcher (con búsqueda en ChromaDB) ───────────────────────
+        match = self._matcher.match(
+            intake=intake,
+            analysis=analysis,
+            search_service=self._search_service,
+        )
 
         # ── Layer 3: Output ───────────────────────────────────────────────────
         history = await self._memory.get_history(cid)

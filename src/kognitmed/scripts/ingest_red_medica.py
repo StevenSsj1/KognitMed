@@ -36,7 +36,28 @@ def main() -> int:
     parser.add_argument(
         "--search",
         default="",
-        help="Prueba de búsqueda semántica tras la ingesta",
+        help="Prueba de búsqueda semántica libre tras la ingesta",
+    )
+    parser.add_argument(
+        "--specialty",
+        default="",
+        help="Filtro exacto por especialidad (ej: Pediatría). Garantiza que todos los resultados la tienen.",
+    )
+    parser.add_argument(
+        "--ciudad",
+        default="",
+        help="Filtro por ciudad (ej: Quito)",
+    )
+    parser.add_argument(
+        "--aseguradora",
+        default="",
+        help="Filtro por aseguradora (ej: humana, bupa, bmi, saludsa)",
+    )
+    parser.add_argument(
+        "--n",
+        type=int,
+        default=10,
+        help="Número máximo de resultados a mostrar (default: 10)",
     )
     args = parser.parse_args()
 
@@ -75,17 +96,46 @@ def main() -> int:
     print(f"   ├─ Saltados   : {result['skipped']} (ya existían)")
     print(f"   └─ Total      : {result['total']}")
 
-    # ── Modo búsqueda de prueba ────────────────────────────────────────────────
-    if args.search:
-        print(f"\n🔍 Búsqueda de prueba: '{args.search}'")
-        results = search_svc.search(args.search, n_results=3)
+    # ── Modo búsqueda de prueba ───────────────────────────────────────────────────────
+    if args.search or args.specialty:
+        ciudad = args.ciudad or None
+        aseguradora = args.aseguradora or None
+
+        if args.specialty:
+            label = f"Especialidad exacta: '{args.specialty}'"
+            if ciudad: label += f" | Ciudad: {ciudad}"
+            if aseguradora: label += f" | Aseguradora: {aseguradora}"
+            print(f"\n🔍 {label}")
+            results = search_svc.find_by_specialty(
+                specialty=args.specialty,
+                aseguradora=aseguradora,
+                ciudad=ciudad,
+                n_results=args.n,
+            )
+        else:
+            label = f"Búsqueda: '{args.search}'"
+            if ciudad: label += f" | Ciudad: {ciudad}"
+            if aseguradora: label += f" | Aseguradora: {aseguradora}"
+            print(f"\n🔍 {label}")
+            results = search_svc.search(
+                query=args.search,
+                n_results=args.n,
+                ciudad=ciudad,
+                aseguradora=aseguradora,
+            )
+
+        print(f"   Encontrados: {len(results)} hospitales\n")
         for i, h in enumerate(results, 1):
-            esp = ", ".join(h["especialidades"][:4]) or "sin especialidades"
-            aseg = ", ".join(h["aseguradoras"])
-            print(f"\n  {i}. {h['nombre']} ({h['ciudad']})")
-            print(f"     Especialidades: {esp}")
-            print(f"     Aseguradoras  : {aseg}")
-            print(f"     Relevancia    : {h['relevance_score']:.3f}")
+            esp_all = ", ".join(h["especialidades"]) or "sin especialidades"
+            aseg = ", ".join(h["aseguradoras"]) or "sin aseguradora"
+            ciudad_str = h['ciudad'] or 'ciudad no especificada'
+            print(f"  {i:2d}. {h['nombre']} ({ciudad_str})")
+            print(f"      Especialidades : {esp_all}")
+            print(f"      Aseguradoras   : {aseg}")
+            print(f"      Relevancia     : {h['relevance_score']:.3f}")
+            if h.get('nota'):
+                print(f"      Nota           : {h['nota']}")
+            print()
 
     return 0
 
