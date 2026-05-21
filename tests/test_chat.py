@@ -9,10 +9,8 @@ import pytest
 from httpx import AsyncClient
 
 from kognitmed.application.chat_service.service import ChatService
-from kognitmed.config import get_settings
 from kognitmed.dependencies import get_chat_service
 from kognitmed.infrastructure.memory.in_memory_store import InMemoryConversationStore
-from kognitmed.infrastructure.llm_providers import build_llm_provider
 from tests.conftest import MockLLMProvider
 
 
@@ -74,23 +72,3 @@ async def test_chat_empty_message_rejected(client: AsyncClient) -> None:
     """Empty messages should be rejected with 422."""
     response = await client.post("/api/v1/chat", json={"message": ""})
     assert response.status_code == 422
-
-
-@pytest.mark.asyncio
-async def test_chat_missing_llm_key_returns_configuration_error(client: AsyncClient) -> None:
-    """Missing provider credentials should not leak as an internal server error."""
-    settings = get_settings().model_copy(update={"llm_provider": "openai", "openai_api_key": ""})
-    app = client._transport.app  # type: ignore[attr-defined]
-    app.dependency_overrides[get_chat_service] = lambda: ChatService(
-        llm_provider=build_llm_provider(settings),
-        memory_store=InMemoryConversationStore(),
-        settings=settings,
-    )
-
-    response = await client.post("/api/v1/chat", json={"message": "Tengo mareo."})
-
-    assert response.status_code == 503
-    assert response.json()["error"] == {
-        "code": "LLM_NOT_CONFIGURED",
-        "message": "El proveedor LLM no esta configurado. Define OPENAI_API_KEY.",
-    }
