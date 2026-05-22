@@ -6,7 +6,7 @@ const CHAT_STATE_KEY = "kognitmed.chat-state";
 const welcomeMessage = {
   id: "welcome",
   role: "assistant",
-  content: "Hola. Describe tu consulta: que sientes, desde cuando y si algo lo empeora.",
+  content: "¡Hola! Soy MediOrientador, tu asistente de orientación médica. Para poder ayudarte con información personalizada sobre tu cobertura, por favor compárteme tu número de cédula.",
 };
 
 const elements = {

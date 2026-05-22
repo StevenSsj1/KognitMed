@@ -8,6 +8,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 COPY pyproject.toml README.md ./
 COPY src/ ./src/
+COPY doc/ ./doc/
 
 RUN uv sync --no-dev --no-editable --link-mode=copy
 
@@ -22,6 +23,7 @@ WORKDIR /app
 # Copy the venv and fix the Python path
 COPY --from=builder /build/.venv /app/.venv
 COPY --from=builder /build/src /app/src
+COPY --from=builder /build/doc /app/doc
 
 # Re-link venv Python and create chroma data directory
 RUN ln -sf /usr/local/bin/python3 /app/.venv/bin/python3 && \

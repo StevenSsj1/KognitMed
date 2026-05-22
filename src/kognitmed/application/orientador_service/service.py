@@ -230,6 +230,17 @@ class MediOrientadorService:
 
     # ── Identificación ───────────────────────────────────────────────────────
 
+    async def _reply_simple(self, cid: UUID, reply: str) -> OrientationResponse:
+        """Persiste y retorna una respuesta simple sin recomendación."""
+        await self._memory.add_message(conversation_id=cid, role="assistant", content=reply)
+        return OrientationResponse(
+            conversation_id=cid,
+            reply=reply,
+            urgency=UrgencyLevel.NORMAL,
+            recommendation=None,
+            provider=self._extraction_llm.provider_name,
+        )
+
     async def _handle_identification(
         self,
         cid: UUID,
@@ -238,60 +249,56 @@ class MediOrientadorService:
     ) -> OrientationResponse:
         """Maneja la fase de identificación del paciente."""
 
-        # Si es el primer mensaje de la conversación (solo 1 mensaje user), dar bienvenida
+        # Si es el primer mensaje y no trae cédula, dar bienvenida
         user_messages = [m for m in history if m.get("role") == "user"]
         if len(user_messages) == 1 and not _CEDULA_PATTERN.search(message):
-            reply = _WELCOME_REPLY
-            await self._memory.add_message(conversation_id=cid, role="assistant", content=reply)
-            return OrientationResponse(
-                conversation_id=cid,
-                reply=reply,
-                urgency=UrgencyLevel.NORMAL,
-                recommendation=None,
-                provider=self._extraction_llm.provider_name,
-            )
+            return await self._reply_simple(cid, _WELCOME_REPLY)
 
-        # Intentar extraer cédula del mensaje
-        cedula_match = _CEDULA_PATTERN.search(message)
-        if not cedula_match:
-            reply = _CEDULA_RETRY_REPLY
-            await self._memory.add_message(conversation_id=cid, role="assistant", content=reply)
-            return OrientationResponse(
-                conversation_id=cid,
-                reply=reply,
-                urgency=UrgencyLevel.NORMAL,
-                recommendation=None,
-                provider=self._extraction_llm.provider_name,
-            )
+        cedula = self._find_cedula(message, history)
+        if not cedula:
+            return await self._reply_simple(cid, _CEDULA_RETRY_REPLY)
 
-        cedula = cedula_match.group(0)
+        user = await self._lookup_user(cid, cedula)
+        if isinstance(user, OrientationResponse):
+            return user  # error response
 
-        # Buscar usuario en MongoDB
+        return await self._register_user(cid, cedula, user)
+
+    @staticmethod
+    def _find_cedula(message: str, history: list[dict[str, str]]) -> str | None:
+        """Extrae cédula del mensaje actual o del historial."""
+        match = _CEDULA_PATTERN.search(message)
+        if match:
+            return match.group(0)
+        for m in history:
+            if m.get("role") == "user":
+                hist_match = _CEDULA_PATTERN.search(m.get("content", ""))
+                if hist_match:
+                    return hist_match.group(0)
+        return None
+
+    async def _lookup_user(self, cid: UUID, cedula: str) -> dict | OrientationResponse:
+        """Busca al usuario en MongoDB. Retorna dict si OK, OrientationResponse si error."""
         if not self._users_service:
             log.error("orientador_no_users_service")
-            reply = "El servicio de usuarios no está disponible en este momento."
-            await self._memory.add_message(conversation_id=cid, role="assistant", content=reply)
-            return OrientationResponse(
-                conversation_id=cid,
-                reply=reply,
-                urgency=UrgencyLevel.NORMAL,
-                recommendation=None,
-                provider=self._extraction_llm.provider_name,
+            return await self._reply_simple(
+                cid, "El servicio de usuarios no está disponible en este momento."
             )
-
-        user = await self._users_service.get_by_cedula(cedula)
+        try:
+            user = await self._users_service.get_by_cedula(cedula)
+        except Exception as exc:
+            log.error("orientador_mongo_error", error=str(exc))
+            return await self._reply_simple(
+                cid,
+                "No pude conectarme a la base de datos para verificar tu información. "
+                "Por favor intenta de nuevo en unos momentos.",
+            )
         if not user:
-            reply = _CEDULA_NOT_FOUND_REPLY
-            await self._memory.add_message(conversation_id=cid, role="assistant", content=reply)
-            return OrientationResponse(
-                conversation_id=cid,
-                reply=reply,
-                urgency=UrgencyLevel.NORMAL,
-                recommendation=None,
-                provider=self._extraction_llm.provider_name,
-            )
+            return await self._reply_simple(cid, _CEDULA_NOT_FOUND_REPLY)
+        return user
 
-        # Construir plan de seguro
+    async def _register_user(self, cid: UUID, cedula: str, user: dict) -> OrientationResponse:
+        """Construye plan de seguro, registra al usuario y responde con bienvenida."""
         plan = build_insurance_plan(user["seguro"])
 
         patient_ctx = PatientContext(
@@ -310,7 +317,6 @@ class MediOrientadorService:
             f"(plan: {plan.plan_name}), que cubre {specialties_count} especialidades.\n\n"
             f"Ahora cuéntame, ¿qué síntomas presentas o en qué puedo ayudarte?"
         )
-        await self._memory.add_message(conversation_id=cid, role="assistant", content=reply)
 
         log.info(
             "orientador_user_identified",
@@ -319,13 +325,7 @@ class MediOrientadorService:
             seguro=user["seguro"],
         )
 
-        return OrientationResponse(
-            conversation_id=cid,
-            reply=reply,
-            urgency=UrgencyLevel.NORMAL,
-            recommendation=None,
-            provider=self._extraction_llm.provider_name,
-        )
+        return await self._reply_simple(cid, reply)
 
     # ── Seguimiento conversacional ────────────────────────────────────────────
 
