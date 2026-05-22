@@ -23,9 +23,10 @@ WORKDIR /app
 COPY --from=builder /build/.venv /app/.venv
 COPY --from=builder /build/src /app/src
 
-# Re-link the venv Python to the runtime Python
+# Re-link venv Python and create chroma data directory
 RUN ln -sf /usr/local/bin/python3 /app/.venv/bin/python3 && \
-    ln -sf /usr/local/bin/python3 /app/.venv/bin/python
+    ln -sf /usr/local/bin/python3 /app/.venv/bin/python && \
+    mkdir -p /app/.chroma && chown -R kognitmed:kognitmed /app/.chroma
 
 # Ensure the venv is on PATH
 ENV PATH="/app/.venv/bin:$PATH"
