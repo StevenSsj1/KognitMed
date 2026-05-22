@@ -62,6 +62,14 @@ class PatientContext(BaseModel):
         default=None,
         description="Ciudad o zona preferida del paciente.",
     )
+    display_name: Optional[str] = Field(
+        default=None,
+        description="Nombre preferido para dirigirse al paciente.",
+    )
+    cedula: Optional[str] = Field(
+        default=None,
+        description="Documento de identidad del paciente para validaciones de flujo.",
+    )
 
 
 # ── Resultado del análisis de síntomas ───────────────────────────────────────
