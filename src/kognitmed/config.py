@@ -79,7 +79,7 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4o-mini"
 
     gemini_api_key: str = ""
-    gemini_model: str = "gemma-3-27b-it"
+    gemini_model: str = "gemini-2.5-flash-lite"
 
     # ── MediOrientador — modelos por layer ───────────────────────────────────
     # Si están vacíos, heredan el modelo global del proveedor configurado.
@@ -99,16 +99,19 @@ class Settings(BaseSettings):
     # ── ChromaDB ─────────────────────────────────────
     chroma_persist_path: str = ".chroma"
 
-    # @property
-    # def mongo_uri(self) -> str:
-    #     """Construct the MongoDB connection URI securely."""
-    #     import urllib.parse
-    #     user = urllib.parse.quote_plus(self.mongo_user)
-    #     pwd = urllib.parse.quote_plus(self.mongo_password)
-    #     return (
-    #         f"mongodb://{user}:{pwd}@{self.mongo_host}:{self.mongo_port}/"
-    #         f"{self.mongo_db}?authSource=admin"
-    #     )
+    # ── Evolution API (WhatsApp) ────────────────────
+    evolution_api_url: str = "http://localhost:8080"
+    evolution_api_key: str = "change-me"
+    evolution_instance_name: str = ""
+    evolution_webhook_secret: str = ""
+
+    @property
+    def mongo_uri(self) -> str:
+        """Construct the MongoDB connection URI securely."""
+        import urllib.parse
+        user = urllib.parse.quote_plus(self.mongo_user)
+        pwd = urllib.parse.quote_plus(self.mongo_password)
+        return f"mongodb://{user}:{pwd}@{self.mongo_host}:{self.mongo_port}/{self.mongo_db}?authSource=admin"
 
     def model_post_init(self, __context: object) -> None:
         # Resolve secret key with fallback strategy

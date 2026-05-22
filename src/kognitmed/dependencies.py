@@ -8,10 +8,13 @@ from typing import Annotated
 from fastapi import Depends
 
 from kognitmed.application.chat_service.service import ChatService
+from kognitmed.application.evolution_service.dedup import MessageDeduplicator
+from kognitmed.application.evolution_service.service import EvolutionWebhookService
 from kognitmed.application.orientador_service.service import MediOrientadorService
 from kognitmed.config import Settings, get_settings
 from kognitmed.infrastructure.database.chroma import get_chroma_client
 from kognitmed.infrastructure.database.red_medica_store import RedMedicaSearchService
+from kognitmed.infrastructure.evolution.client import EvolutionAPIClient
 from kognitmed.infrastructure.llm_providers import build_llm_provider, build_llm_provider_for_layer
 from kognitmed.infrastructure.memory.in_memory_store import InMemoryConversationStore
 
@@ -64,4 +67,25 @@ def get_orientador_service(
         memory_store=store,
         settings=settings,
         search_service=search_service,
+    )
+
+
+@lru_cache
+def get_message_deduplicator() -> MessageDeduplicator:
+    return MessageDeduplicator()
+
+
+def get_evolution_webhook_service(
+    settings: Annotated[Settings, Depends(get_settings)],
+    store: Annotated[InMemoryConversationStore, Depends(get_conversation_store)],
+    dedup: Annotated[MessageDeduplicator, Depends(get_message_deduplicator)],
+) -> EvolutionWebhookService:
+    """Build EvolutionWebhookService with its dependencies."""
+    llm_provider = build_llm_provider(settings)
+    chat_service = ChatService(llm_provider=llm_provider, memory_store=store, settings=settings)
+    evo_client = EvolutionAPIClient(settings)
+    return EvolutionWebhookService(
+        chat_service=chat_service,
+        evolution_client=evo_client,
+        deduplicator=dedup,
     )

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import structlog
 from google import genai
-from google.genai import errors, types
+from google.genai import types
 
 from kognitmed.domain.exceptions import (
     LLMNotConfiguredError,
@@ -21,7 +21,10 @@ class GeminiProvider(AbstractLLMProvider):
 
     def __init__(self, api_key: str, model: str) -> None:
         if not api_key:
-            raise LLMNotConfiguredError("gemini", env_var="GEMINI_API_KEY")
+            raise ValueError(
+                "GEMINI_API_KEY is not set. "
+                "Add it to your .env file or environment variables."
+            )
         self._client = genai.Client(api_key=api_key)
         self._model_name = model
 
@@ -35,22 +38,32 @@ class GeminiProvider(AbstractLLMProvider):
         **kwargs: object,
     ) -> str:
         try:
-            system_instruction, contents = self._build_contents(messages)
+            # Separate system instruction from conversation
+            system_parts: list[str] = []
+            contents: list[types.Content] = []
+            pending_user: str | None = None
+
+            for msg in messages:
+                if msg["role"] == "system":
+                    system_parts.append(msg["content"])
+                elif msg["role"] == "user":
+                    prefix = "\n".join(system_parts)
+                    system_parts = []
+                    pending_user = f"{prefix}\n\n{msg['content']}".strip() if prefix else msg["content"]
+                elif msg["role"] == "assistant" and pending_user is not None:
+                    contents.append(types.Content(role="user", parts=[types.Part(text=pending_user)]))
+                    contents.append(types.Content(role="model", parts=[types.Part(text=msg["content"])]))
+                    pending_user = None
+
+            # Add final user message
+            if pending_user:
+                contents.append(types.Content(role="user", parts=[types.Part(text=pending_user)]))
+
             response = await self._client.aio.models.generate_content(
                 model=self._model_name,
                 contents=contents,
-                config=types.GenerateContentConfig(
-                    system_instruction=system_instruction or None,
-                    temperature=kwargs.get("temperature", 0.3),
-                    max_output_tokens=kwargs.get("max_tokens", 2048),
-                ),
             )
-            return response.text or ""
-        except errors.APIError as exc:
-            log.error("gemini_completion_failed", error_code=exc.code, error_type=type(exc).__name__)
-            if exc.code == 429:
-                raise LLMRateLimitError("gemini", detail="ResourceExhausted") from exc
-            raise LLMProviderError("gemini", detail=type(exc).__name__) from exc
+            return response.text
         except Exception as exc:
             log.error("gemini_completion_failed", error_type=type(exc).__name__)
             raise LLMProviderError("gemini", detail=type(exc).__name__) from exc

@@ -22,6 +22,11 @@ def configure_logging(debug: bool = False) -> None:
         level=log_level,
     )
 
+    # Silence noisy MongoDB driver heartbeat logs
+    logging.getLogger("pymongo.topology").setLevel(logging.WARNING)
+    logging.getLogger("pymongo.connection").setLevel(logging.WARNING)
+    logging.getLogger("pymongo.serverSelection").setLevel(logging.WARNING)
+
     structlog.configure(
         processors=[
             structlog.contextvars.merge_contextvars,
