@@ -9,7 +9,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 COPY pyproject.toml README.md ./
 COPY src/ ./src/
 
-RUN uv sync --no-dev --no-editable
+RUN uv sync --no-dev --no-editable --link-mode=copy
 
 # ── Runtime stage ─────────────────────────────────────────────────────────────
 FROM python:3.12-slim AS runtime
@@ -19,9 +19,13 @@ RUN groupadd -r kognitmed && useradd -r -g kognitmed kognitmed
 
 WORKDIR /app
 
-# Copy only the installed packages and app source
+# Copy the venv and fix the Python path
 COPY --from=builder /build/.venv /app/.venv
 COPY --from=builder /build/src /app/src
+
+# Re-link the venv Python to the runtime Python
+RUN ln -sf /usr/local/bin/python3 /app/.venv/bin/python3 && \
+    ln -sf /usr/local/bin/python3 /app/.venv/bin/python
 
 # Ensure the venv is on PATH
 ENV PATH="/app/.venv/bin:$PATH"
