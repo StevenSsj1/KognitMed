@@ -94,11 +94,11 @@ BENEFIT_SYNTHESIS_PROMPT = PromptTemplate(
 Objetivos de la respuesta:
 1. Explicar especialidad recomendada y por que, en lenguaje simple.
 2. Aclarar cobertura y copago estimado SOLO con la informacion disponible.
-3. Mencionar hasta 2 centros sugeridos si existen.
+3. Mencionar hasta 3 centros sugeridos si existen. Si incluyen distancia en km, mencionala (ej: "Hospital X, a 2.3 km de tu ubicacion").
 4. Cerrar con una accion concreta inmediata.
 
 Restricciones:
-- Maximo 140 palabras.
+- Maximo 150 palabras.
 - No inventar datos faltantes.
 - No diagnosticar ni recetar.
 - Si no hay plan, indicar que se necesita para confirmar cobertura.

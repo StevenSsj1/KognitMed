@@ -5,6 +5,7 @@ from __future__ import annotations
 import structlog
 from google import genai
 from google.genai import types
+from google.genai.errors import APIError
 
 from kognitmed.domain.exceptions import (
     LLMNotConfiguredError,
@@ -71,6 +72,8 @@ class GeminiProvider(AbstractLLMProvider):
                 error_type=type(exc).__name__,
                 error_detail=detail,
             )
+            if isinstance(exc, APIError) and exc.code == 429:
+                raise LLMRateLimitError("gemini", detail=detail) from exc
             raise LLMProviderError("gemini", detail=detail) from exc
 
     @staticmethod

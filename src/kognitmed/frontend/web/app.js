@@ -329,6 +329,14 @@ async function submitMessage(event) {
   }
 
   try {
+    const loc = JSON.parse(localStorage.getItem(LOCATION_KEY));
+    if (loc?.latitude != null && loc?.longitude != null) {
+      payload.latitud = loc.latitude;
+      payload.longitud = loc.longitude;
+    }
+  } catch { /* sin ubicación */ }
+
+  try {
     const response = await fetch(CHAT_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

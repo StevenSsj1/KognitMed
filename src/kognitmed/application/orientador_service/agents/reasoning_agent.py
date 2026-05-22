@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import structlog
 from pydantic import BaseModel, Field
 
@@ -20,6 +21,17 @@ log = structlog.get_logger(__name__)
 _DEFAULT_COPAY: float = 0.0
 _FALLBACK_SPECIALTY: str = "Medicina General"
 _MAX_HOSPITALS_FROM_CHROMA: int = 8
+_EARTH_RADIUS_KM: float = 6371.0
+
+
+def _haversine(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """Calculate the great-circle distance in km between two points."""
+    lat1_r, lon1_r = math.radians(lat1), math.radians(lon1)
+    lat2_r, lon2_r = math.radians(lat2), math.radians(lon2)
+    dlat = lat2_r - lat1_r
+    dlon = lon2_r - lon1_r
+    a = math.sin(dlat / 2) ** 2 + math.cos(lat1_r) * math.cos(lat2_r) * math.sin(dlon / 2) ** 2
+    return _EARTH_RADIUS_KM * 2 * math.asin(math.sqrt(a))
 
 
 class MatchResult(BaseModel):
@@ -48,10 +60,17 @@ class ReasoningAgent:
         intake: IntakeResult,
         analysis: SymptomAnalysis,
         search_service: RedMedicaSearchService | None = None,
+        patient_lat: float | None = None,
+        patient_lon: float | None = None,
     ) -> MatchResult:
         urgency = self._resolve_urgency(intake, analysis)
         plan: InsurancePlan | None = intake.plan
         ciudad = intake.patient_context.preferred_location if intake.patient_context else None
+
+        # Coordenadas del paciente: parámetro explícito o desde patient_context
+        if patient_lat is None and intake.patient_context:
+            patient_lat = intake.patient_context.latitud
+            patient_lon = intake.patient_context.longitud
 
         if plan:
             chosen_specialty, is_covered, copay = self._find_best_specialty(
@@ -73,6 +92,8 @@ class ReasoningAgent:
             ciudad=ciudad,
             copay_base=copay,
             plan=plan,
+            patient_lat=patient_lat,
+            patient_lon=patient_lon,
         )
 
         coverage_note = self._build_coverage_note(
@@ -150,6 +171,8 @@ class ReasoningAgent:
         ciudad: str | None,
         copay_base: float | None,
         plan: InsurancePlan | None,
+        patient_lat: float | None = None,
+        patient_lon: float | None = None,
     ) -> list[HospitalRecommendation]:
         if search_service is None:
             return []
@@ -181,6 +204,8 @@ class ReasoningAgent:
                     aseguradora=aseguradora,
                     copay_base=copay_base,
                     modifier_by_hospital=modifier_by_hospital,
+                    patient_lat=patient_lat,
+                    patient_lon=patient_lon,
                 )
                 for h in raw_results
             ]
@@ -195,6 +220,8 @@ class ReasoningAgent:
         aseguradora: str | None,
         copay_base: float | None,
         modifier_by_hospital: dict[str, float],
+        patient_lat: float | None = None,
+        patient_lon: float | None = None,
     ) -> HospitalRecommendation:
         hosp_name = hospital.get("nombre", "")
         modifier = modifier_by_hospital.get(hosp_name.casefold(), 0.0)
@@ -205,6 +232,13 @@ class ReasoningAgent:
             in_network = aseguradora.casefold() in [
                 a.casefold() for a in hospital.get("aseguradoras", [])
             ]
+
+        # Calcular distancia si tenemos coordenadas de ambos
+        hosp_lat = hospital.get("latitud")
+        hosp_lon = hospital.get("longitud")
+        distance_km: float | None = None
+        if patient_lat is not None and patient_lon is not None and hosp_lat is not None and hosp_lon is not None:
+            distance_km = round(_haversine(patient_lat, patient_lon, hosp_lat, hosp_lon), 1)
 
         return HospitalRecommendation(
             name=hosp_name,
@@ -217,6 +251,7 @@ class ReasoningAgent:
             latitud=hospital.get("latitud"),
             longitud=hospital.get("longitud"),
             relevance_score=hospital.get("relevance_score"),
+            distance_km=distance_km,
         )
 
     @staticmethod
@@ -238,10 +273,13 @@ class ReasoningAgent:
 
     @staticmethod
     def _rank_hospitals(hospitals: list[HospitalRecommendation]) -> list[HospitalRecommendation]:
+        has_distances = any(h.distance_km is not None for h in hospitals)
         return sorted(
             hospitals,
             key=lambda h: (
                 not h.is_in_network,
+                # Si hay distancias, priorizar cercanía; si no, ignorar
+                h.distance_km if has_distances and h.distance_km is not None else 0.0,
                 h.copay_usd,
                 -(h.relevance_score or 0.0),
                 h.name,

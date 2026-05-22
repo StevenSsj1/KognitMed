@@ -32,6 +32,14 @@ class OrientationRequest(BaseModel):
         description="Contexto del paciente (plan de seguro, ubicación). "
                     "Si se omite, MediOrientador opera sin datos de cobertura.",
     )
+    latitud: Optional[float] = Field(
+        default=None,
+        description="Latitud GPS del paciente (desde el navegador/frontend).",
+    )
+    longitud: Optional[float] = Field(
+        default=None,
+        description="Longitud GPS del paciente (desde el navegador/frontend).",
+    )
 
 
 class OrientationResponse(BaseModel):

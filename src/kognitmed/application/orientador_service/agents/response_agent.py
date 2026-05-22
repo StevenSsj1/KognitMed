@@ -85,8 +85,14 @@ class OutputAgent:
         patient_context_str: str,
         insurance_context_str: str,
     ) -> str:
-        hospitals = [h.name for h in match.hospitals[:3]]
-        hospitals_str = ", ".join(hospitals) if hospitals else "sin centros sugeridos"
+        top_hospitals = match.hospitals[:3]
+        hospital_parts: list[str] = []
+        for h in top_hospitals:
+            part = h.name
+            if h.distance_km is not None:
+                part += f" ({h.distance_km} km)"
+            hospital_parts.append(part)
+        hospitals_str = ", ".join(hospital_parts) if hospital_parts else "sin centros sugeridos"
         copay_str = f"${match.copay_usd:.2f}" if match.copay_usd is not None else "no determinado"
 
         analysis_data = (

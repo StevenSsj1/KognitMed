@@ -46,11 +46,16 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     configure_logging(debug=settings.debug)
     log.info("kognitmed_starting", provider=settings.llm_provider, debug=settings.debug)
 
-    # MongoDB is intentionally disabled for now.
-    # from kognitmed.infrastructure.database.mongo import ping_mongo, close_mongo_client
-    # db_connected = await ping_mongo(settings)
-    # if not db_connected:
-    #     log.warning("database_connection_not_ready_at_startup")
+    from kognitmed.infrastructure.database.mongo import ping_mongo, close_mongo_client, get_mongo_client
+    from kognitmed.application.users_service.service import UsersService
+    db_connected = await ping_mongo(settings)
+    if not db_connected:
+        log.warning("database_connection_not_ready_at_startup")
+    else:
+        # Seed de usuarios de prueba
+        client = get_mongo_client(settings)
+        users_svc = UsersService(client[settings.mongo_db])
+        await users_svc.seed_if_empty()
 
     # Initialize and verify ChromaDB connection (file/persistent mode — no server needed)
     from kognitmed.infrastructure.database.chroma import ping_chroma, close_chroma_client, get_chroma_client
@@ -76,8 +81,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     yield
 
-    # MongoDB is intentionally disabled for now.
-    # close_mongo_client()
+    close_mongo_client()
     # Release ChromaDB client reference
     close_chroma_client()
     log.info("kognitmed_shutdown")

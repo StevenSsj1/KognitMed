@@ -89,12 +89,11 @@ class Settings(BaseSettings):
     orientador_synthesis_model: str = ""
 
     # ── MongoDB ──────────────────────────────────
-    # MongoDB is intentionally disabled for now.
-    # mongo_host: str = "localhost"
-    # mongo_port: int = 27017
-    # mongo_user: str = "admin"
-    # mongo_password: str = "securepassword123"
-    # mongo_db: str = "kognitmed"
+    mongo_host: str = "localhost"
+    mongo_port: int = 27017
+    mongo_user: str = "admin"
+    mongo_password: str = "securepassword123"
+    mongo_db: str = "kognitmed"
 
     # ── ChromaDB ─────────────────────────────────────
     chroma_persist_path: str = ".chroma"

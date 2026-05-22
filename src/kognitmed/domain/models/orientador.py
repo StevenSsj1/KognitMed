@@ -70,6 +70,14 @@ class PatientContext(BaseModel):
         default=None,
         description="Documento de identidad del paciente para validaciones de flujo.",
     )
+    latitud: Optional[float] = Field(
+        default=None,
+        description="Latitud GPS del paciente (enviada desde el frontend).",
+    )
+    longitud: Optional[float] = Field(
+        default=None,
+        description="Longitud GPS del paciente (enviada desde el frontend).",
+    )
 
 
 # ── Resultado del análisis de síntomas ───────────────────────────────────────
@@ -108,6 +116,10 @@ class HospitalRecommendation(BaseModel):
     latitud: Optional[float] = None
     longitud: Optional[float] = None
     relevance_score: Optional[float] = None
+    distance_km: Optional[float] = Field(
+        default=None,
+        description="Distancia en km desde la ubicación del paciente al hospital.",
+    )
 
 
 class BenefitRecommendation(BaseModel):

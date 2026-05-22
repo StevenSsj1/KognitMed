@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import pytest
+
 from kognitmed.infrastructure.llm_providers.gemini_provider import GeminiProvider
 
 
@@ -22,3 +24,28 @@ def test_gemini_provider_builds_system_instruction_and_chat_contents() -> None:
         "Desde cuando?",
         "Desde ayer.",
     ]
+
+
+@pytest.mark.asyncio
+async def test_gemini_provider_rate_limit_error() -> None:
+    from unittest.mock import AsyncMock, MagicMock
+    from google.genai.errors import APIError
+    from kognitmed.domain.exceptions import LLMRateLimitError
+
+    provider = GeminiProvider(api_key="dummy_key", model="gemini-2.5-flash-lite")
+    api_error = APIError(
+        code=429,
+        response_json={"error": {"code": 429, "message": "Quota exceeded"}},
+    )
+
+    # Mock the client's generate_content call
+    provider._client = MagicMock()
+    provider._client.aio = MagicMock()
+    provider._client.aio.models = MagicMock()
+    provider._client.aio.models.generate_content = AsyncMock(side_effect=api_error)
+
+    with pytest.raises(LLMRateLimitError) as exc_info:
+        await provider.complete([{"role": "user", "content": "hello"}])
+
+    assert exc_info.value.code == "LLM_RATE_LIMITED"
+    assert "Quota exceeded" in exc_info.value.detail

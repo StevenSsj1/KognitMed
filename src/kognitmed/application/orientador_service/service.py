@@ -5,24 +5,36 @@ Orquesta los 3 layers del agente:
   Layer 2 (agents/reasoning_agent.py) → cruza síntomas con plan de seguro + ChromaDB
   Layer 3 (agents/response_agent.py)  → sintetiza respuesta conversacional + estructura
 
-No contiene lógica de negocio propia: delega en cada layer.
+Flujo de identificación:
+  1. El agente pide cédula al paciente.
+  2. Busca en MongoDB → obtiene nombre y seguro.
+  3. Construye InsurancePlan desde el seguro.
+  4. Procede con el análisis de síntomas.
+
+Flujo de seguimiento:
+  - Guarda el último MatchResult por conversación.
+  - Si el mensaje no contiene síntomas nuevos → responde conversacionalmente
+    usando el contexto previo (hospitales, distancias, copago).
 """
 
 from __future__ import annotations
 
 import json
+import re
 import structlog
 from uuid import UUID
 
 from kognitmed.application.orientador_service.agents.intake_agent import IntakeAgent, IntakeResult
-from kognitmed.application.orientador_service.agents.reasoning_agent import ReasoningAgent
+from kognitmed.application.orientador_service.agents.reasoning_agent import MatchResult, ReasoningAgent
 from kognitmed.application.orientador_service.agents.response_agent import OutputAgent
 from kognitmed.application.orientador_service.schemas import (
     OrientationRequest,
     OrientationResponse,
 )
+from kognitmed.application.users_service.plan_builder import build_insurance_plan
+from kognitmed.application.users_service.service import UsersService
 from kognitmed.config import Settings
-from kognitmed.domain.models.orientador import SymptomAnalysis, UrgencyLevel
+from kognitmed.domain.models.orientador import PatientContext, SymptomAnalysis, UrgencyLevel
 from kognitmed.domain.prompts.orientador_prompts import SYMPTOM_INTENT_PROMPT
 from kognitmed.infrastructure.database.red_medica_store import RedMedicaSearchService
 from kognitmed.infrastructure.llm_providers.base_provider import AbstractLLMProvider
@@ -30,9 +42,22 @@ from kognitmed.infrastructure.memory.in_memory_store import InMemoryConversation
 
 log = structlog.get_logger(__name__)
 
-_IDENTITY_REQUEST_REPLY = (
-    "Antes de continuar con consultas laborales necesito validar tus datos. "
-    "Por favor compárteme tu cédula y el nombre con el que deseas que te llame."
+_CEDULA_PATTERN = re.compile(r"\b\d{10}\b")
+
+_WELCOME_REPLY = (
+    "¡Hola! Soy MediOrientador, tu asistente de orientación médica. "
+    "Para poder ayudarte con información personalizada sobre tu cobertura, "
+    "por favor compárteme tu número de cédula."
+)
+
+_CEDULA_NOT_FOUND_REPLY = (
+    "No encontré un usuario registrado con esa cédula. "
+    "Por favor verifica el número e intenta de nuevo."
+)
+
+_CEDULA_RETRY_REPLY = (
+    "No pude identificar un número de cédula en tu mensaje. "
+    "Por favor escríbeme tu número de cédula (10 dígitos) para continuar."
 )
 
 
@@ -41,6 +66,7 @@ class MediOrientadorService:
     Agente conversacional de orientación médica y beneficios.
 
     Flujo:
+        0. [Identificación] Pide cédula → busca en MongoDB → carga plan de seguro.
         1. [Intake]   Valida y normaliza el mensaje del paciente.
         2. [LLM-ext]  Extrae síntomas e intención en JSON — modelo rápido/barato.
         3. [Matcher]  Cruza síntomas con plan de seguro (sin LLM).
@@ -54,17 +80,23 @@ class MediOrientadorService:
         memory_store: InMemoryConversationStore,
         settings: Settings,
         search_service: RedMedicaSearchService | None = None,
+        users_service: UsersService | None = None,
     ) -> None:
-        self._extraction_llm = extraction_llm   # Layer extracción: rápido/barato
-        self._synthesis_llm = synthesis_llm     # Layer síntesis: potente/capaz
+        self._extraction_llm = extraction_llm
+        self._synthesis_llm = synthesis_llm
         self._memory = memory_store
         self._settings = settings
-        self._search_service = search_service   # Red médica en ChromaDB
+        self._search_service = search_service
+        self._users_service = users_service
 
-        # Instancias de los 3 layers
         self._intake = IntakeAgent()
         self._reasoning = ReasoningAgent()
         self._output = OutputAgent(llm_provider=synthesis_llm)
+
+        # Estado por conversación
+        self._identified_users: dict[UUID, PatientContext] = {}
+        self._last_match: dict[UUID, MatchResult] = {}
+        self._last_intake: dict[UUID, IntakeResult] = {}
 
     # ── Punto de entrada ──────────────────────────────────────────────────────
 
@@ -80,35 +112,39 @@ class MediOrientadorService:
 
         log.info("orientador_start", conversation_id=str(cid), provider=self._extraction_llm.provider_name)
 
+        # ── Fase 0: Identificación ───────────────────────────────────────────
+        if cid not in self._identified_users:
+            return await self._handle_identification(cid, request.message, history)
+
+        # Usuario ya identificado — inyectar su contexto
+        patient_ctx = self._identified_users[cid]
+
+        # Actualizar coordenadas si el frontend las envía en este request
+        if request.latitud is not None and request.longitud is not None:
+            patient_ctx.latitud = request.latitud
+            patient_ctx.longitud = request.longitud
+
+        request_with_ctx = OrientationRequest(
+            conversation_id=cid,
+            message=request.message,
+            patient_context=patient_ctx,
+            latitud=request.latitud,
+            longitud=request.longitud,
+        )
+
         # ── Layer 1: Intake ───────────────────────────────────────────────────
         intake: IntakeResult = self._intake.process(
-            raw_message=request.message,
-            patient_context=request.patient_context,
+            raw_message=request_with_ctx.message,
+            patient_context=request_with_ctx.patient_context,
             history=history,
         )
 
         if intake.validation_errors:
-            # Mensaje inválido → responder con el primer error
             error_reply = f"No pude procesar tu consulta: {intake.validation_errors[0]}"
             await self._memory.add_message(conversation_id=cid, role="assistant", content=error_reply)
             return OrientationResponse(
                 conversation_id=cid,
                 reply=error_reply,
-                urgency=UrgencyLevel.NORMAL,
-                recommendation=None,
-                provider=self._extraction_llm.provider_name,
-            )
-
-        if intake.is_work_related and intake.missing_identity_fields:
-            missing_spanish = ", ".join(intake.missing_identity_fields)
-            reply = (
-                f"{_IDENTITY_REQUEST_REPLY} "
-                f"Datos faltantes detectados: {missing_spanish}."
-            )
-            await self._memory.add_message(conversation_id=cid, role="assistant", content=reply)
-            return OrientationResponse(
-                conversation_id=cid,
-                reply=reply,
                 urgency=UrgencyLevel.NORMAL,
                 recommendation=None,
                 provider=self._extraction_llm.provider_name,
@@ -129,28 +165,58 @@ class MediOrientadorService:
                 provider=self._extraction_llm.provider_name,
             )
 
-        # ── LLM: Extracción de síntomas (entre Layer 1 y 2) ──────────────────
+        # ── LLM: Extracción de síntomas ──────────────────────────────────────
         analysis: SymptomAnalysis = await self._extract_symptoms(intake.clean_message)
 
-        # ── Layer 2: Matcher (con búsqueda en ChromaDB) ───────────────────────
-        match = self._reasoning.match(
-            intake=intake,
-            analysis=analysis,
-            search_service=self._search_service,
-        )
+        # ── Detectar seguimiento vs síntomas nuevos ──────────────────────────
+        is_followup = self._is_followup(cid, analysis)
 
-        # ── Layer 3: Output ───────────────────────────────────────────────────
-        patient_ctx_str, insurance_ctx_str = self._build_context_strings(intake)
+        if is_followup:
+            # Seguimiento: usar match previo pero responder conversacionalmente
+            match = self._last_match[cid]
+            prev_intake = self._last_intake.get(cid, intake)
 
-        response = await self._output.build_response(
-            conversation_id=cid,
-            match=match,
-            history=history[:-1],  # excluir el mensaje actual ya procesado
-            patient_context_str=patient_ctx_str,
-            insurance_context_str=insurance_ctx_str,
-        )
+            # Recalcular distancias si ahora tenemos ubicación
+            if request.latitud is not None and match.hospitals:
+                match = self._reasoning.match(
+                    intake=prev_intake,
+                    analysis=analysis,
+                    search_service=self._search_service,
+                    patient_lat=request.latitud,
+                    patient_lon=request.longitud,
+                )
+                self._last_match[cid] = match
 
-        # Persistir respuesta del agente
+            response = await self._handle_followup(
+                cid=cid,
+                message=request.message,
+                match=match,
+                intake=prev_intake,
+                history=history,
+            )
+        else:
+            # Síntomas nuevos: pipeline completo
+            match = self._reasoning.match(
+                intake=intake,
+                analysis=analysis,
+                search_service=self._search_service,
+                patient_lat=request.latitud,
+                patient_lon=request.longitud,
+            )
+
+            self._last_match[cid] = match
+            self._last_intake[cid] = intake
+
+            patient_ctx_str, insurance_ctx_str = self._build_context_strings(intake)
+
+            response = await self._output.build_response(
+                conversation_id=cid,
+                match=match,
+                history=history[:-1],
+                patient_context_str=patient_ctx_str,
+                insurance_context_str=insurance_ctx_str,
+            )
+
         await self._memory.add_message(
             conversation_id=cid, role="assistant", content=response.reply
         )
@@ -161,6 +227,212 @@ class MediOrientadorService:
     async def get_history(self, conversation_id: UUID) -> list[dict[str, str]]:
         """Devuelve el historial de la conversación."""
         return await self._memory.get_history(conversation_id)
+
+    # ── Identificación ───────────────────────────────────────────────────────
+
+    async def _handle_identification(
+        self,
+        cid: UUID,
+        message: str,
+        history: list[dict[str, str]],
+    ) -> OrientationResponse:
+        """Maneja la fase de identificación del paciente."""
+
+        # Si es el primer mensaje de la conversación (solo 1 mensaje user), dar bienvenida
+        user_messages = [m for m in history if m.get("role") == "user"]
+        if len(user_messages) == 1 and not _CEDULA_PATTERN.search(message):
+            reply = _WELCOME_REPLY
+            await self._memory.add_message(conversation_id=cid, role="assistant", content=reply)
+            return OrientationResponse(
+                conversation_id=cid,
+                reply=reply,
+                urgency=UrgencyLevel.NORMAL,
+                recommendation=None,
+                provider=self._extraction_llm.provider_name,
+            )
+
+        # Intentar extraer cédula del mensaje
+        cedula_match = _CEDULA_PATTERN.search(message)
+        if not cedula_match:
+            reply = _CEDULA_RETRY_REPLY
+            await self._memory.add_message(conversation_id=cid, role="assistant", content=reply)
+            return OrientationResponse(
+                conversation_id=cid,
+                reply=reply,
+                urgency=UrgencyLevel.NORMAL,
+                recommendation=None,
+                provider=self._extraction_llm.provider_name,
+            )
+
+        cedula = cedula_match.group(0)
+
+        # Buscar usuario en MongoDB
+        if not self._users_service:
+            log.error("orientador_no_users_service")
+            reply = "El servicio de usuarios no está disponible en este momento."
+            await self._memory.add_message(conversation_id=cid, role="assistant", content=reply)
+            return OrientationResponse(
+                conversation_id=cid,
+                reply=reply,
+                urgency=UrgencyLevel.NORMAL,
+                recommendation=None,
+                provider=self._extraction_llm.provider_name,
+            )
+
+        user = await self._users_service.get_by_cedula(cedula)
+        if not user:
+            reply = _CEDULA_NOT_FOUND_REPLY
+            await self._memory.add_message(conversation_id=cid, role="assistant", content=reply)
+            return OrientationResponse(
+                conversation_id=cid,
+                reply=reply,
+                urgency=UrgencyLevel.NORMAL,
+                recommendation=None,
+                provider=self._extraction_llm.provider_name,
+            )
+
+        # Construir plan de seguro
+        plan = build_insurance_plan(user["seguro"])
+
+        patient_ctx = PatientContext(
+            display_name=user["nombre"],
+            cedula=cedula,
+            plan=plan,
+        )
+        self._identified_users[cid] = patient_ctx
+
+        seguro_display = user["seguro"].title()
+        specialties_count = len(plan.covered_specialties) if plan else 0
+
+        reply = (
+            f"¡Bienvenido/a, {user['nombre']}! "
+            f"He verificado tu información: estás asegurado/a con **{seguro_display}** "
+            f"(plan: {plan.plan_name}), que cubre {specialties_count} especialidades.\n\n"
+            f"Ahora cuéntame, ¿qué síntomas presentas o en qué puedo ayudarte?"
+        )
+        await self._memory.add_message(conversation_id=cid, role="assistant", content=reply)
+
+        log.info(
+            "orientador_user_identified",
+            conversation_id=str(cid),
+            cedula=cedula,
+            seguro=user["seguro"],
+        )
+
+        return OrientationResponse(
+            conversation_id=cid,
+            reply=reply,
+            urgency=UrgencyLevel.NORMAL,
+            recommendation=None,
+            provider=self._extraction_llm.provider_name,
+        )
+
+    # ── Seguimiento conversacional ────────────────────────────────────────────
+
+    def _is_followup(self, cid: UUID, analysis: SymptomAnalysis) -> bool:
+        """Detecta si el mensaje es una pregunta de seguimiento (no síntomas nuevos)."""
+        if cid not in self._last_match:
+            return False
+
+        # Si la extracción no encontró síntomas reales, es seguimiento
+        if not analysis.symptoms:
+            return True
+
+        # Si el único "síntoma" es el fallback del mensaje crudo, es seguimiento
+        if len(analysis.symptoms) == 1 and analysis.reasoning and "fallback" in analysis.reasoning.lower():
+            return True
+
+        # Si sugiere solo Medicina General sin síntomas claros, posible seguimiento
+        if (
+            analysis.suggested_specialties == ["Medicina General"]
+            and analysis.urgency == UrgencyLevel.NORMAL
+            and not analysis.is_emergency
+            and len(analysis.symptoms) == 1
+            and len(analysis.symptoms[0]) < 20
+        ):
+            return True
+
+        return False
+
+    async def _handle_followup(
+        self,
+        *,
+        cid: UUID,
+        message: str,
+        match: MatchResult,
+        intake: IntakeResult,
+        history: list[dict[str, str]],
+    ) -> OrientationResponse:
+        """Responde a preguntas de seguimiento usando el contexto previo."""
+        patient_ctx_str, insurance_ctx_str = self._build_context_strings(intake)
+
+        # Construir resumen detallado de hospitales con distancias para el LLM
+        hospitals_detail = self._build_hospitals_detail(match)
+
+        from kognitmed.domain.prompts.orientador_prompts import MEDIO_ORIENTADOR_SYSTEM_PROMPT
+
+        system_prompt = MEDIO_ORIENTADOR_SYSTEM_PROMPT.render(
+            patient_context=patient_ctx_str,
+            insurance_context=insurance_ctx_str,
+        )
+
+        followup_context = (
+            f"Contexto de la consulta previa del paciente:\n"
+            f"- Especialidad recomendada: {match.chosen_specialty}\n"
+            f"- Cobertura: {'Sí' if match.is_covered else 'No'}\n"
+            f"- Copago base: ${match.copay_usd:.2f}\n"
+            f"- Urgencia: {match.urgency.value}\n"
+            f"- {match.coverage_note}\n\n"
+            f"Hospitales disponibles (ordenados por cercanía si hay ubicación):\n"
+            f"{hospitals_detail}\n\n"
+            f"El paciente pregunta: \"{message}\"\n\n"
+            f"Responde de forma directa a lo que pregunta. "
+            f"Si pregunta por cercanía, usa las distancias en km. "
+            f"Si pide hospitales fuera de su red, menciónalo y aclara que no tendría cobertura. "
+            f"Si es un saludo o mensaje casual, responde amablemente y pregunta si necesita algo más. "
+            f"Máximo 150 palabras. No repitas la misma recomendación anterior si no la pide."
+        )
+
+        messages: list[dict[str, str]] = [
+            {"role": "system", "content": system_prompt},
+            *history[:-1],
+            {"role": "user", "content": followup_context},
+        ]
+
+        reply = (await self._synthesis_llm.complete(messages, temperature=0.3)).strip()
+
+        log.info("orientador_followup", conversation_id=str(cid))
+
+        recommendation = ReasoningAgent.to_benefit_recommendation(match)
+        recommendation.summary = reply
+
+        return OrientationResponse(
+            conversation_id=cid,
+            reply=reply,
+            urgency=match.urgency,
+            recommendation=recommendation,
+            provider=self._synthesis_llm.provider_name,
+        )
+
+    @staticmethod
+    def _build_hospitals_detail(match: MatchResult) -> str:
+        """Construye un resumen de hospitales con distancia y copago para el LLM."""
+        if not match.hospitals:
+            return "No se encontraron hospitales disponibles."
+
+        lines: list[str] = []
+        for i, h in enumerate(match.hospitals, 1):
+            parts = [f"{i}. {h.name}"]
+            if h.ciudad:
+                parts.append(f"Ciudad: {h.ciudad}")
+            if h.distance_km is not None:
+                parts.append(f"Distancia: {h.distance_km} km")
+            parts.append(f"Copago: ${h.copay_usd:.2f}")
+            parts.append(f"En red: {'Sí' if h.is_in_network else 'No'}")
+            if h.especialidades:
+                parts.append(f"Especialidades: {', '.join(h.especialidades[:5])}")
+            lines.append(" | ".join(parts))
+        return "\n".join(lines)
 
     # ── Helpers ───────────────────────────────────────────────────────────────
 
