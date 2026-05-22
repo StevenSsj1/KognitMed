@@ -1,0 +1,20 @@
+services:
+  evolution-api:
+    container_name: hackiathon_evolution_api
+    image: evoapicloud/evolution-api:v2.3.7
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - evolution_instances:/evolution/instances
+    networks:
+      - hackiathon_network
+
+volumes:
+  evolution_instances:
+
+networks:
+  hackiathon_network:
+    external: true
