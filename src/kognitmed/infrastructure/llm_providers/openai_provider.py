@@ -40,5 +40,10 @@ class OpenAIProvider(AbstractLLMProvider):
             content = response.choices[0].message.content
             return content or ""
         except Exception as exc:
-            log.error("openai_completion_failed", error_type=type(exc).__name__)
-            raise LLMProviderError("openai", detail=type(exc).__name__) from exc
+            detail = str(exc).strip() or type(exc).__name__
+            log.error(
+                "openai_completion_failed",
+                error_type=type(exc).__name__,
+                error_detail=detail,
+            )
+            raise LLMProviderError("openai", detail=detail) from exc

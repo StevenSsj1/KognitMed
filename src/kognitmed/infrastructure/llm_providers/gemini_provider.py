@@ -65,8 +65,13 @@ class GeminiProvider(AbstractLLMProvider):
             )
             return response.text
         except Exception as exc:
-            log.error("gemini_completion_failed", error_type=type(exc).__name__)
-            raise LLMProviderError("gemini", detail=type(exc).__name__) from exc
+            detail = str(exc).strip() or type(exc).__name__
+            log.error(
+                "gemini_completion_failed",
+                error_type=type(exc).__name__,
+                error_detail=detail,
+            )
+            raise LLMProviderError("gemini", detail=detail) from exc
 
     @staticmethod
     def _build_contents(

@@ -1,4 +1,4 @@
-const CHAT_ENDPOINT = "/api/v1/chat";
+const CHAT_ENDPOINT = "/api/v1/orientador";
 const THEME_KEY = "kognitmed.theme";
 const LOCATION_KEY = "kognitmed.location";
 const CHAT_STATE_KEY = "kognitmed.chat-state";
@@ -340,12 +340,13 @@ async function submitMessage(event) {
     }
 
     conversation.apiConversationId = body.conversation_id;
+    const assistantReply = body.reply || body.response || "No se recibio respuesta del orientador.";
     conversation.messages = conversation.messages.map((message) =>
       message.id === pendingId
         ? {
             id: pendingId,
             role: "assistant",
-            content: body.response,
+            content: assistantReply,
           }
         : message,
     );

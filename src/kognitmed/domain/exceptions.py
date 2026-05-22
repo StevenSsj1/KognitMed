@@ -40,6 +40,7 @@ class LLMProviderError(DomainException):
             code="LLM_ERROR",
         )
         self.provider = provider
+        self.detail = detail
 
 
 class LLMRateLimitError(LLMProviderError):

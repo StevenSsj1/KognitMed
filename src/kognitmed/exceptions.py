@@ -40,7 +40,12 @@ async def not_found_handler(request: Request, exc: EntityNotFoundError) -> JSONR
 
 async def llm_error_handler(request: Request, exc: LLMProviderError) -> JSONResponse:
     # Do NOT expose the provider detail in the user response
-    log.error("llm_provider_error", provider=exc.provider, path=str(request.url))
+    log.error(
+        "llm_provider_error",
+        provider=exc.provider,
+        detail=getattr(exc, "detail", "unknown"),
+        path=str(request.url),
+    )
     return JSONResponse(
         status_code=502,
         content={"error": {"code": "LLM_ERROR", "message": "AI service temporarily unavailable."}},
