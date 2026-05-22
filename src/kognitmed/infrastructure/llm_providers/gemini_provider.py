@@ -3,9 +3,14 @@
 from __future__ import annotations
 
 import structlog
-import google.generativeai as genai
+from google import genai
+from google.genai import errors, types
 
-from kognitmed.domain.exceptions import LLMProviderError
+from kognitmed.domain.exceptions import (
+    LLMNotConfiguredError,
+    LLMProviderError,
+    LLMRateLimitError,
+)
 from kognitmed.infrastructure.llm_providers.base_provider import AbstractLLMProvider
 
 log = structlog.get_logger(__name__)
@@ -16,11 +21,8 @@ class GeminiProvider(AbstractLLMProvider):
 
     def __init__(self, api_key: str, model: str) -> None:
         if not api_key:
-            raise ValueError(
-                "GEMINI_API_KEY is not set. "
-                "Add it to your .env file or environment variables."
-            )
-        genai.configure(api_key=api_key)
+            raise LLMNotConfiguredError("gemini", env_var="GEMINI_API_KEY")
+        self._client = genai.Client(api_key=api_key)
         self._model_name = model
 
     @property
@@ -33,30 +35,47 @@ class GeminiProvider(AbstractLLMProvider):
         **kwargs: object,
     ) -> str:
         try:
-            model = genai.GenerativeModel(self._model_name)
-
-            # Convert OpenAI-style messages to Gemini format
-            # System messages are prepended to the first user message
-            system_parts: list[str] = []
-            chat_history = []
-            pending_user: str | None = None
-
-            for msg in messages:
-                if msg["role"] == "system":
-                    system_parts.append(msg["content"])
-                elif msg["role"] == "user":
-                    prefix = "\n".join(system_parts)
-                    system_parts = []
-                    pending_user = f"{prefix}\n\n{msg['content']}".strip() if prefix else msg["content"]
-                elif msg["role"] == "assistant" and pending_user is not None:
-                    chat_history.append({"role": "user", "parts": [pending_user]})
-                    chat_history.append({"role": "model", "parts": [msg["content"]]})
-                    pending_user = None
-
-            chat = model.start_chat(history=chat_history)
-            last_user = pending_user or ""
-            response = await chat.send_message_async(last_user)
-            return response.text
+            system_instruction, contents = self._build_contents(messages)
+            response = await self._client.aio.models.generate_content(
+                model=self._model_name,
+                contents=contents,
+                config=types.GenerateContentConfig(
+                    system_instruction=system_instruction or None,
+                    temperature=kwargs.get("temperature", 0.3),
+                    max_output_tokens=kwargs.get("max_tokens", 2048),
+                ),
+            )
+            return response.text or ""
+        except errors.APIError as exc:
+            log.error("gemini_completion_failed", error_code=exc.code, error_type=type(exc).__name__)
+            if exc.code == 429:
+                raise LLMRateLimitError("gemini", detail="ResourceExhausted") from exc
+            raise LLMProviderError("gemini", detail=type(exc).__name__) from exc
         except Exception as exc:
             log.error("gemini_completion_failed", error_type=type(exc).__name__)
             raise LLMProviderError("gemini", detail=type(exc).__name__) from exc
+
+    @staticmethod
+    def _build_contents(
+        messages: list[dict[str, str]],
+    ) -> tuple[str, list[types.Content]]:
+        """Convert OpenAI-style chat messages to Google GenAI request contents."""
+        system_parts: list[str] = []
+        contents: list[types.Content] = []
+
+        for message in messages:
+            role = message["role"]
+            if role == "system":
+                system_parts.append(message["content"])
+                continue
+            if role not in {"user", "assistant"}:
+                continue
+
+            contents.append(
+                types.Content(
+                    role="model" if role == "assistant" else "user",
+                    parts=[types.Part.from_text(text=message["content"])],
+                )
+            )
+
+        return "\n\n".join(system_parts), contents

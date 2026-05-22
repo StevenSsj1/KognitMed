@@ -14,7 +14,8 @@ python -m pip install -r requirements.txt
 2. Crea `.env` desde `.env.example` y configura el proveedor LLM.
 
 Por defecto el backend usa OpenAI, asi que `OPENAI_API_KEY` debe tener valor.
-Para usar Gemini, define `LLM_PROVIDER=gemini` y `GEMINI_API_KEY`.
+Para usar Gemma hospedado por la API de Gemini, define `LLM_PROVIDER=gemini`,
+`GEMINI_API_KEY` y `GEMINI_MODEL=gemma-3-27b-it`.
 
 3. Inicia la API FastAPI en `http://127.0.0.1:8000`:
 

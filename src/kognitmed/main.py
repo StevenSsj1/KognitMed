@@ -15,11 +15,19 @@ from fastapi import FastAPI
 from pydantic import ValidationError
 
 from kognitmed.config import get_settings
-from kognitmed.domain.exceptions import DomainException, EntityNotFoundError, LLMProviderError
+from kognitmed.domain.exceptions import (
+    DomainException,
+    EntityNotFoundError,
+    LLMNotConfiguredError,
+    LLMProviderError,
+    LLMRateLimitError,
+)
 from kognitmed.exceptions import (
     domain_exception_handler,
     generic_error_handler,
+    llm_not_configured_handler,
     llm_error_handler,
+    llm_rate_limit_handler,
     not_found_handler,
     validation_error_handler,
 )
@@ -94,6 +102,8 @@ def create_app() -> FastAPI:
 
     # Exception handlers
     app.add_exception_handler(EntityNotFoundError, not_found_handler)  # type: ignore[arg-type]
+    app.add_exception_handler(LLMNotConfiguredError, llm_not_configured_handler)  # type: ignore[arg-type]
+    app.add_exception_handler(LLMRateLimitError, llm_rate_limit_handler)  # type: ignore[arg-type]
     app.add_exception_handler(LLMProviderError, llm_error_handler)  # type: ignore[arg-type]
     app.add_exception_handler(DomainException, domain_exception_handler)  # type: ignore[arg-type]
     app.add_exception_handler(ValidationError, validation_error_handler)  # type: ignore[arg-type]

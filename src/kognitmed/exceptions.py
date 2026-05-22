@@ -14,7 +14,9 @@ from pydantic import ValidationError
 from kognitmed.domain.exceptions import (
     DomainException,
     EntityNotFoundError,
+    LLMNotConfiguredError,
     LLMProviderError,
+    LLMRateLimitError,
 )
 
 log = structlog.get_logger(__name__)
@@ -42,6 +44,32 @@ async def llm_error_handler(request: Request, exc: LLMProviderError) -> JSONResp
     return JSONResponse(
         status_code=502,
         content={"error": {"code": "LLM_ERROR", "message": "AI service temporarily unavailable."}},
+    )
+
+
+async def llm_rate_limit_handler(request: Request, exc: LLMRateLimitError) -> JSONResponse:
+    log.warning("llm_provider_rate_limited", provider=exc.provider, path=str(request.url))
+    return JSONResponse(
+        status_code=429,
+        content={
+            "error": {
+                "code": "LLM_RATE_LIMITED",
+                "message": "El proveedor LLM alcanzo su limite temporal. Intenta de nuevo en unos minutos.",
+            }
+        },
+    )
+
+
+async def llm_not_configured_handler(request: Request, exc: LLMNotConfiguredError) -> JSONResponse:
+    log.warning("llm_provider_not_configured", provider=exc.provider, path=str(request.url))
+    return JSONResponse(
+        status_code=503,
+        content={
+            "error": {
+                "code": "LLM_NOT_CONFIGURED",
+                "message": f"El proveedor LLM no esta configurado. Define {exc.env_var}.",
+            }
+        },
     )
 
 

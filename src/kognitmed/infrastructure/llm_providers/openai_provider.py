@@ -5,7 +5,7 @@ from __future__ import annotations
 import structlog
 from openai import AsyncOpenAI
 
-from kognitmed.domain.exceptions import LLMProviderError
+from kognitmed.domain.exceptions import LLMNotConfiguredError, LLMProviderError
 from kognitmed.infrastructure.llm_providers.base_provider import AbstractLLMProvider
 
 log = structlog.get_logger(__name__)
@@ -16,10 +16,7 @@ class OpenAIProvider(AbstractLLMProvider):
 
     def __init__(self, api_key: str, model: str) -> None:
         if not api_key:
-            raise ValueError(
-                "OPENAI_API_KEY is not set. "
-                "Add it to your .env file or environment variables."
-            )
+            raise LLMNotConfiguredError("openai", env_var="OPENAI_API_KEY")
         # API key is passed directly — never logged or stored in plaintext beyond this init
         self._client = AsyncOpenAI(api_key=api_key)
         self._model = model

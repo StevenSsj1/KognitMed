@@ -31,5 +31,13 @@ async def test_chat_frontend_script_deletes_local_conversations(client: AsyncCli
 
     assert response.status_code == 200
     assert "history-delete" in response.text
-    assert "function deleteConversation(conversationId)" in response.text
+    assert "function deleteConversation(conversationId, row)" in response.text
     assert "state.conversations.length === 0" in response.text
+
+
+@pytest.mark.asyncio
+async def test_chat_frontend_css_respects_reduced_motion(client: AsyncClient) -> None:
+    response = await client.get("/chat-assets/styles.css")
+
+    assert response.status_code == 200
+    assert "@media (prefers-reduced-motion: reduce)" in response.text

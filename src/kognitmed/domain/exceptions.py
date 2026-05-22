@@ -40,3 +40,23 @@ class LLMProviderError(DomainException):
             code="LLM_ERROR",
         )
         self.provider = provider
+
+
+class LLMRateLimitError(LLMProviderError):
+    """Raised when an LLM provider rejects a request due to quota or rate limits."""
+
+    def __init__(self, provider: str, detail: str) -> None:
+        super().__init__(provider=provider, detail=detail)
+        self.code = "LLM_RATE_LIMITED"
+
+
+class LLMNotConfiguredError(DomainException):
+    """Raised when the selected LLM provider is missing credentials."""
+
+    def __init__(self, provider: str, env_var: str) -> None:
+        super().__init__(
+            message=f"LLM provider '{provider}' is not configured: {env_var}.",
+            code="LLM_NOT_CONFIGURED",
+        )
+        self.provider = provider
+        self.env_var = env_var

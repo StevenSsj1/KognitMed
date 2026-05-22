@@ -132,7 +132,7 @@ function renderHistory() {
       remove.className = "history-delete";
       remove.title = "Eliminar conversacion";
       remove.setAttribute("aria-label", `Eliminar ${conversation.title}`);
-      remove.addEventListener("click", () => deleteConversation(conversation.id));
+      remove.addEventListener("click", () => deleteConversation(conversation.id, row));
 
       row.append(button, remove);
       section.append(row);
@@ -229,7 +229,17 @@ function startConversation() {
   render();
 }
 
-function deleteConversation(conversationId) {
+function deleteConversation(conversationId, row) {
+  if (row && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    row.classList.add("is-removing");
+    window.setTimeout(() => removeConversation(conversationId), 180);
+    return;
+  }
+
+  removeConversation(conversationId);
+}
+
+function removeConversation(conversationId) {
   const removedActiveConversation = conversationId === state.activeId;
   state.conversations = state.conversations.filter((conversation) => conversation.id !== conversationId);
 

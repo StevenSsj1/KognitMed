@@ -79,7 +79,7 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4o-mini"
 
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-1.5-flash"
+    gemini_model: str = "gemma-3-27b-it"
 
     # ── MediOrientador — modelos por layer ───────────────────────────────────
     # Si están vacíos, heredan el modelo global del proveedor configurado.
